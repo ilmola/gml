@@ -34,7 +34,7 @@ For optimal performance you may wish to compile with "-O3 -ffast-math -DNODEBUG"
 The vec template looks a bit like std::array.
 
 ~~~
-template <typename T, unsigned N> class vec;
+template <typename T, std::size_t N> class vec;
 ~~~
 Where T is the type of a single component and N is the number of components.
 
@@ -72,7 +72,7 @@ There are no GLSL like swizzle operations.
 The mat template works a bit like nested std::array.
 
 ~~~
-template <typename T, unsigned C, unsigned R> class mat;
+template <typename T, std::size_t C, std::size_t R> class mat;
 ~~~
 Where T is the type of a single component, C is the number of columns and R is the number if rows.
 
