@@ -6,12 +6,14 @@
 #ifndef __gml_util_hpp__
 #define __gml_util_hpp__
 
+#include <algorithm>
+
 
 namespace gml {
 
 
 /// Converts degrees to radians
-template <typename T> 
+template <typename T>
 T radians(T degrees) {
 	return degrees * static_cast<T>(0.017453292519943295769236907684886);
 }
