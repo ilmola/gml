@@ -468,6 +468,16 @@ vec<T, N> mix(const vec<T, N>& v1, const vec<T, N>& v2, const vec<T, N>& a) {
 }
 
 
+/// Linear spherical interpolation between v1 and v2 using a as factor
+template <typename T, std::size_t N>
+vec<T, N> slerp(const vec<T, N>& v1, const vec<T, N>& v2, const T& a) {
+	using std::sin;
+	const T theta = angle(v1, v2);
+	const T sine = sin(theta);
+	return sin((T{1} - a) * theta) / sine * v1 + sin(a * theta) / sine * v2;
+}
+
+
 /// Returns the angle (in radians) between vectors v1 and v2
 /// If v1 or v2 is zero length zero is returned.
 template <typename T, std::size_t N>
@@ -476,12 +486,9 @@ T angle(const vec<T, N>& v1, const vec<T, N>& v2) {
 	using std::acos;
 	using std::numeric_limits;
 
-	T len = sqrt(dot(v1, v1)*dot(v2, v2));
+	const T len = sqrt(dot(v1, v1) * dot(v2, v2));
 	if (len <= numeric_limits<T>::epsilon()) return T{0};
-	T d = dot(v1, v2) / len;
-	if (d > T{1}) d = T{1};
-	if (d < T{-1}) d = T{-1};
-	return acos(d);
+	return acos(clamp(dot(v1, v2) / len, T{-1}, T{1}));
 }
 
 
