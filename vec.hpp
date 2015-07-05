@@ -69,7 +69,7 @@ public:
 		std::size_t M,
 		typename std::enable_if<(M > N), int>::type = 0
 	>
-	vec(const vec<T, M>& v) {
+	explicit vec(const vec<T, M>& v) {
 		for (std::size_t i = 0; i < N; ++i) data_[i] = v[i];
 	}
 
