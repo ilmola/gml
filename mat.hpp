@@ -227,7 +227,7 @@ public:
 	/// Returns the number of columns in the matrix
 	/// (NOT the number of components)
 	/// This is the largest value that can be given to the [] -operator.
-	std::size_t size() const noexcept { return C; }
+	static std::size_t size() noexcept { return C; }
 
 	/// Iterator to the first column
 	vec<T, R>* begin() noexcept { return data_; }

@@ -261,7 +261,7 @@ public:
 
 	/// Returns the number of components in the vector.
 	/// The maximum value that can be given to []-operator.
-	std::size_t size() const noexcept { return N; }
+	static std::size_t size() noexcept { return N; }
 
 	/// Iterator to the first component.
 	T* begin() noexcept { return data_; }
