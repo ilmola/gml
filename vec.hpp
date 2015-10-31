@@ -38,7 +38,7 @@ public:
 	/// Initializes components from a C-array.
 	/// The data MUST have at least N components or behaviour is undefined.
 	/// If data is null assertion error will occur.
-	explicit vec(const T data[N]) {
+	explicit vec(const T* data) {
 		assert( data != nullptr );
 		for (std::size_t i = 0; i < N; ++i) data_[i] = data[i];
 	}

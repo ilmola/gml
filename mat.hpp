@@ -50,11 +50,11 @@ public:
 		static_assert(sizeof...(args) == C, "Invalid number of arguments!");
 	}
 
-	/// Initialize from an array.
+	/// Initialize from a c-array.
 	/// The array must have at least C*R components or behaviour is undefined.
 	/// If data is null assertion error will occur.
 	/// @param columnMajor Are the components in the input in column major order
-	mat(const T data[C*R], bool columnMajor) {
+	mat(const T* data, bool columnMajor) {
 		assert( data != nullptr );
 		if (columnMajor) {
 			for (std::size_t i = 0; i < C; ++i) {
@@ -221,7 +221,7 @@ public:
 	}
 
 	/// Returns pointer to the first component.
-	/// The matrix data in column major order
+	/// The matrix data is in column major order
 	const T* data() const noexcept { return data_[0].data(); }
 
 	/// Returns the number of columns in the matrix
