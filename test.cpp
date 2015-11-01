@@ -46,7 +46,7 @@ inline void EQ(const SourceContext& sc, int a, int b) {
 
 
 inline void EQ(const SourceContext& sc, float a, float b) {
-	if (!fcmp(a, b)) { 
+	if (!fcmp(a, b)) {
 		std::cout << sc << ": " << a << " != " << b << "\n";
 	}
 }
@@ -190,6 +190,13 @@ int main() {
 		EQ(SC, vec3{v1, v2}, v2 - v1);
 		EQ(SC, vec2{v1}, vec2{v1, std::size_t{2}});
 
+		// Cast
+		EQ(SC,
+			static_vec_cast<int>(v1),
+			ivec3{static_cast<int>(v1[0]), static_cast<int>(v1[1]), static_cast<int>(v1[2])}
+		);
+		EQ(SC, static_vec_cast<float>(static_vec_cast<double>(v1)), v1);
+
 		// Iteration
 		std::size_t index = 0;
 		for (auto value : v1) {
@@ -270,6 +277,18 @@ int main() {
 		EQ(SC, mat4{mat3{I}, 1.0f}, I);
 		EQ(SC, mat2{mat4x2{mat2x4{M1}}}, mat2{M1});
 
+		// Casts
+		EQ(SC, static_mat_cast<float>(static_mat_cast<double>(M1)), M1);
+		EQ(SC,
+			static_mat_cast<int>(M1),
+			imat4{
+				static_vec_cast<int>(M1[0]),
+				static_vec_cast<int>(M1[1]),
+				static_vec_cast<int>(M1[2]),
+				static_vec_cast<int>(M1[3])
+			}
+		);
+
 		// Iteration
 		std::size_t cIndex = 0;
 		for (const auto& column : M1) {
@@ -334,13 +353,20 @@ int main() {
 		EQ(SC, project(vec3{zero, zero, -one}, I, perspective(one, one, one, 2.0f), ivec4{-1, -1, 2, 2}), zeros);
 
 
-		//-Quaternions-----------------------------------------------------------------------------
+		//-Quaternions----------------------------------------------------------
 
 		// Constructors
 		EQ(SC, quat{q1.real}.real, q1.real);
 		EQ(SC, quat{q1.imag}.imag, q1.imag);
 		EQ(SC, quat{q1.real, q1.imag}, q1);
 		EQ(SC, quat{q1}, q1);
+
+		// Casts
+		EQ(SC, static_quaternion_cast<float>(static_quaternion_cast<double>(q1)), q1);
+		EQ(SC,
+			static_quaternion_cast<int>(q1),
+			iquat{static_cast<int>(q1.real), static_vec_cast<int>(q1.imag)}
+		);
 
 		// Quaternion operators
 		EQ(SC, -(-q1), q1);
@@ -361,7 +387,7 @@ int main() {
 		EQ(SC, q1 * scalar, q1 * quat{scalar});
 		EQ(SC, q1 * v1, q1 * quat{v1});
 		EQ(SC, v1 * q1, quat{v1} * q1);
-		
+
 		EQ(SC, (tempq = q1), q1);
 		EQ(SC, (tempq += q2), q1 + q2);
 		EQ(SC, (tempq *= q3), (q1 + q2) * q3);

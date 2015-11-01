@@ -644,6 +644,16 @@ vec<T, N-1> transform(const mat<T, N, N>& m, const vec<T, N-1>& v) {
 }
 
 
+/// Static cast each component from T2 to T1.
+template <typename T1, typename T2, std::size_t C, std::size_t R>
+mat<T1, C, R> static_mat_cast(const mat<T2, C, R>& m) {
+	mat<T1, C, R> temp;
+	for (std::size_t i = 0; i < C; ++i)
+		temp[i] = static_vec_cast<T1>(m[i]);
+	return temp;
+}
+
+
 typedef mat<float, 2, 2> mat2x2;
 typedef mat<float, 2, 3> mat2x3;
 typedef mat<float, 2, 4> mat2x4;
