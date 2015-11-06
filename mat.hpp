@@ -525,7 +525,7 @@ mat<T, 4, 4> ortho(
 	const T dY = top - bottom;
 	const T dZ = zFar - zNear;
 	const T data[16] = {
-		T{2} / dX, T{0},      T{0},       (right + left) / dX,
+		T{2} / dX, T{0},      T{0},       -(right + left) / dX,
 		T{0},      T{2} / dY, T{0},       -(top + bottom) / dY,
 		T{0},      T{0},      T{-2} / dZ, -(zFar + zNear) / dZ,
 		T{0},      T{0},      T{0},       T{1}
