@@ -3,8 +3,9 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __gml_mat_hpp__
-#define __gml_mat_hpp__
+#ifndef UUID_8B39B0365617488895EAC6FEC2A32C6E
+#define UUID_8B39B0365617488895EAC6FEC2A32C6E
+
 
 #include <assert.h>
 #include <iostream>

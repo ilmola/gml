@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __gml_util_hpp__
-#define __gml_util_hpp__
+#ifndef UUID_BD878441A4634595B03E6859030E9A7D
+#define UUID_BD878441A4634595B03E6859030E9A7D
 
 #include <algorithm>
 

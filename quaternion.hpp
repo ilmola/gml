@@ -3,8 +3,8 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __gml_quaternion_hpp__
-#define __gml_quaternion_hpp__
+#ifndef UUID_B15DF4F752A94088BD3A77BC2D628831
+#define UUID_B15DF4F752A94088BD3A77BC2D628831
 
 namespace gml {
 

@@ -3,8 +3,9 @@
 // (See accompanying file LICENSE.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef __gml_vec_hpp__
-#define __gml_vec_hpp__
+#ifndef UUID_98EC23264CC64D72B996E6FC39002D48
+#define UUID_98EC23264CC64D72B996E6FC39002D48
+
 
 #include <assert.h>
 #include <iostream>
@@ -45,7 +46,7 @@ public:
 
 	/// Initializes components from N values directly.
 	template <
-		typename... Args, 
+		typename... Args,
 		typename std::enable_if<N == sizeof...(Args), int>::type = 0
 	>
 	vec(const Args&... args) :
@@ -151,7 +152,7 @@ public:
 		temp *= a;
 		return temp;
 	}
-	
+
 	/// Component-wise division
 	vec<T, N> operator/(const vec<T, N>& v) const {
 		vec<T, N> temp{*this};
