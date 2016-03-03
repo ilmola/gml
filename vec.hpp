@@ -279,6 +279,17 @@ private:
 };
 
 
+/// Applies the given function fn to each component
+template <typename T, std::size_t N, typename F>
+vec<T, N> transform(F fn, const vec<T, N>& v) {
+	vec<T, N> temp;
+	for (std::size_t i = 0; i < N; ++i) {
+		temp[i] = fn(v[i]);
+	}
+	return temp;
+}
+
+
 /// Negates all components
 template <typename T, std::size_t N>
 vec<T, N> operator-(const vec<T, N>& v) {

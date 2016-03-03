@@ -263,6 +263,7 @@ int main() {
 		EQ(SC, distance(zeros, v1), length(v1));
 		EQ(SC, angle(v1, v1), zero);
 		EQ(SC, project(ones, ones), ones);
+		EQ(SC, transform([] (float x) { return x * x; }, v1), v1 * v1);
 
 
 		//-Matrices-------------------------------------------------------------
