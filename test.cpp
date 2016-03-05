@@ -176,6 +176,9 @@ int main() {
 
 		EQ(SC, radians(degrees(scalar)), scalar );
 		EQ(SC, std::sin(radians(90.0)), one );
+		EQ(SC, repeat(scalar, scalar, scalar+1.0), scalar);
+		EQ(SC, repeat(scalar, scalar-1.0, scalar), scalar-1.0);
+		EQ(SC, repeat(scalar, scalar-1.0, scalar+1.0), scalar);
 
 
 		//-Vectors-------------------------------------------------------------

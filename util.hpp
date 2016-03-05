@@ -31,6 +31,39 @@ T clamp(T val, T minVal, T maxVal) {
 	return std::min<T>(std::max<T>(val, minVal), maxVal);
 }
 
+
+/// Wraps a value around to the given interval
+/// @param min start point of the interval inclusive
+/// @param max end point of the interval exclusive
+template <
+	typename T,
+	typename std::enable_if<!std::is_integral<T>::value, int>::type = 0
+>
+T repeat(T val, T min, T max)
+{
+	using std::fmod;
+	T temp = fmod(val - min, max - min);
+	if (temp < T{0}) temp += max - min;
+	return temp + min;
+}
+
+
+/// Wraps a value around to the given interval
+/// @param min start point of the interval inclusive
+/// @param max end point of the interval exclusive
+template <
+	typename T,
+	typename std::enable_if<std::is_integral<T>::value, int>::type = 0
+>
+T repeat(T val, T min, T max)
+{
+	T temp = (val - min) % (max - min);
+	if (temp < T{0}) temp += max - min;
+	return temp + min;
+}
+
+
+
 }
 
 #endif
