@@ -84,13 +84,6 @@ public:
 		}
 	}
 
-	/// A vector from point p1 to point p2
-	vec(const vec<T, N>& p1, const vec<T, N>& p2) {
-		for (std::size_t i = 0; i < N ; ++i) {
-			data_[i] = p2.data_[i] - p1.data_[i];
-		}
-	}
-
 	vec(const vec<T, N>&) = default;
 
 	vec(vec<T, N>&&) = default;
@@ -566,7 +559,7 @@ vec<T, N> clamp(const vec<T, N>& v, const T& minVal, const T& maxVal) {
 /// The points must not lie on the same line!
 template <typename T>
 vec<T, 3> normal(const vec<T, 3>& p1, const vec<T, 3>& p2, const vec<T, 3>& p3) {
-	return normalize(cross(vec<T, 3>{p1, p2}, vec<T, 3>{p1, p3}));
+	return normalize(cross(p2 - p1, p3 - p1));
 }
 
 
