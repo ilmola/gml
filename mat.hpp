@@ -549,7 +549,7 @@ template <typename T>
 mat<T, 4, 4> lookAt(
 	const vec<T, 3>& eye, const vec<T, 3>& center, const vec<T, 3>& up
 ) {
-	const vec<T, 3> z = normalize(vec<T, 3>{eye, center});
+	const vec<T, 3> z = normalize(center - eye);
 	const vec<T, 3> x = normalize(cross(z, up));
 	const vec<T, 3> y = cross(x, z);
 

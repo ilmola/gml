@@ -421,14 +421,14 @@ vec<T, N> normalize(const vec<T, N>& v) {
 /// Returns the length of the vector from p1 to p2
 template <typename T, std::size_t N>
 T distance(const vec<T, N>& p1, const vec<T, N>& p2) {
-	return length(vec<T, N>{p1, p2});
+	return length(p2 - p1);
 }
 
 
 /// Computes the area between the 3 points
 template <typename T>
 T area(const vec<T, 3>& p1, const vec<T, 3>& p2, const vec<T, 3>& p3) {
-	return length(cross(vec<T, 3>{p1, p2}, vec<T, 3>{p1, p3})) / T{2};
+	return length(cross(p2 - p1, p3 - p1)) / T{2};
 }
 
 
