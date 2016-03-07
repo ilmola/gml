@@ -721,9 +721,9 @@ typedef vec<bool, 2> bvec2;
 typedef vec<bool, 3> bvec3;
 typedef vec<bool, 4> bvec4;
 
-typedef vec<std::size_t, 2> nvec2;
-typedef vec<std::size_t, 3> nvec3;
-typedef vec<std::size_t, 4> nvec4;
+typedef vec<std::size_t, 2> zuvec2;
+typedef vec<std::size_t, 3> zuvec3;
+typedef vec<std::size_t, 4> zuvec4;
 
 }
 
