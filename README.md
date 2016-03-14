@@ -52,7 +52,6 @@ Common constructors:
 vec3 a{};  // All zeros
 vec3 b{1.0f}; // All ones
 vec3 c{1.0f, 2.0f, 3.0f}; // Vector (1, 2, 3)
-vec3 d{a, b}; // Vector from point a to point b.
 vec4 e{a, 1.0f}; // Copy a and add 1 as the last component.
 vec2 f{a}; // Copy a but drop the last component
 vec3 g{1.0f, 2.0f}; // ERROR: Will not compile. Invalid number of arguments.
