@@ -12,6 +12,8 @@
 #include <cmath>
 #include <utility>
 #include <limits>
+#include <sstream>
+#include <string>
 
 
 namespace gml {
@@ -362,6 +364,15 @@ std::istream& operator>>(std::istream& is, vec<T, N>& v) {
 		is >> tmp;
 	}
 	return is;
+}
+
+
+/// Converts a vec to std::string.
+template <typename T, std::size_t N>
+std::string to_string(const vec<T, N>& v) {
+	std::stringstream ss{};
+	ss << v;
+	return ss.str();
 }
 
 

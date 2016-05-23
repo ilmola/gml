@@ -6,6 +6,12 @@
 #ifndef UUID_B15DF4F752A94088BD3A77BC2D628831
 #define UUID_B15DF4F752A94088BD3A77BC2D628831
 
+#include <assert.h>
+#include <iostream>
+#include <cmath>
+#include <sstream>
+#include <string>
+
 namespace gml {
 
 
@@ -210,6 +216,15 @@ std::istream& operator>>(std::istream& is, quaternion<T>& q) {
 	char ch = 0;
 	is >> ch >> q.real >> ch >> q.imag >> ch;
 	return is;
+}
+
+
+/// Converts a quaternion to std::string.
+template <typename T>
+std::string to_string(const quaternion<T>& q) {
+	std::stringstream ss{};
+	ss << q;
+	return ss.str();
 }
 
 

@@ -10,6 +10,8 @@
 #include <assert.h>
 #include <iostream>
 #include <cmath>
+#include <sstream>
+#include <string>
 
 
 namespace gml {
@@ -280,6 +282,15 @@ std::istream& operator>>(std::istream& is, mat<T, C, R>& m) {
 		is >> tmp;
 	}
 	return is;
+}
+
+
+/// Converts a mat to std::string.
+template <typename T, std::size_t C, std::size_t R>
+std::string to_string(const mat<T, C, R>& m) {
+	std::stringstream ss{};
+	ss << m;
+	return ss.str();
 }
 
 

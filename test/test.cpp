@@ -10,7 +10,7 @@
 #include <sstream>
 #include <random>
 
-#include "gml.hpp"
+#include <gml/gml.hpp>
 
 using namespace gml;
 
@@ -37,6 +37,11 @@ inline std::ostream& operator<<(std::ostream& os, const SourceContext& sc) {
 inline bool fcmp(double a, double b) {
 	const double EPSILON = 0.01f;
 	return std::abs(a - b) <= EPSILON * std::max(std::abs(a), std::abs(b));
+}
+
+
+inline void EQ(const SourceContext& sc, const std::string& a, const std::string& b) {
+	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
 }
 
 
@@ -237,6 +242,7 @@ int main() {
 		vstream << v1;
 		vstream >> temp;
 		EQ(SC, temp, v1);
+		EQ(SC, to_string(v1), vstream.str());
 
 		// vector functions
 		EQ(SC, static_cast<int>(v1.size()), 3);
@@ -321,6 +327,7 @@ int main() {
 		mstream << M1;
 		mstream >> TEMP;
 		EQ(SC, TEMP, M1);
+		EQ(SC, to_string(M1), mstream.str());
 
 		EQ(SC, static_cast<int>(M1.size()), 4 );
 
@@ -400,6 +407,7 @@ int main() {
 		qstream << q1;
 		qstream >> tempq;
 		EQ(SC, tempq, q1);
+		EQ(SC, to_string(q1), qstream.str());
 
 		// Quaternion functions
 		EQ(SC, conj(q1 * q2), conj(q2) * conj(q1));
