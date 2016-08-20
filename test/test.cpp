@@ -341,6 +341,8 @@ int main() {
 		//if (determinant(M1) != 0.0) EQ(SC, inverse(inverse(M1)), M1 );
 		EQ(SC, outerProduct(v1, v2), mat<double, 1, 3>{v1} * transpose(mat<double, 1, 3>{v2}));
 		EQ(SC, matrixCompMult(M1, M2), dmat4{M1[0] * M2[0], M1[1] * M2[1], M1[2] * M2[2], M1[3] * M2[3]});
+		EQ(SC, trace(M1), M1[0][0] + M1[1][1] + M1[2][2] + M1[3][3]);
+		EQ(SC, trace(M1), trace(transpose(M1)));
 
 		// Matrix and vector
 		EQ(SC, I * dvec4{v1, scalar}, dvec4{v1, scalar});
@@ -423,6 +425,9 @@ int main() {
 		EQ(SC, qrotate(dvec3{scalar, zero, zero}), qrotate(scalar, dvec3{one, zero, zero}));
 		EQ(SC, qrotate(dvec3{zero, scalar, zero}), qrotate(scalar, dvec3{zero, one, zero}));
 		EQ(SC, qrotate(dvec3{zero, zero, scalar}), qrotate(scalar, dvec3{zero, zero, one}));
+		EQ(SC, rotate(iq), I);
+		EQ(SC, rotate(qrotate(v1)), rotate(v1));
+		EQ(SC, rotate(qrotate(rotate(qrotate(v1)))), rotate(v1));
 		EQ(SC, transform(qrotate(zeros), v1), v1);
 		EQ(SC, transform(qrotate(dvec3{radians(180.0), zero, zero}), v1), dvec3{v1[0], -v1[1], -v1[2]});
 		EQ(SC, transform(normalize(q1), v1), (normalize(q1) * v1 * conj(normalize(q1))).imag);

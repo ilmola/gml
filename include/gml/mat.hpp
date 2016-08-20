@@ -491,6 +491,27 @@ mat<T, 4, 4> rotate(const quaternion<T>& q) {
 }
 
 
+/// Generates a rotation quaternion from a rotation matrix.
+/// The input matrix is assumed to be a valid rotation matrix.
+template <typename T>
+quaternion<T> qrotate(const mat<T, 4, 4>& m) {
+	using std::sqrt;
+
+	const T t = trace(m);
+	const T S = static_cast<T>(0.5) / sqrt(t);
+
+	return quaternion<T>{
+		static_cast<T>(0.25) / S,
+		vec<T, 3>{
+			S * (m[1][2] - m[2][1]),
+			S * (m[2][0] - m[0][2]),
+			S * (m[0][1] - m[1][0])
+		}
+	};
+
+}
+
+
 /// Generates a perspective projection matrix.
 /// This is the same matrix that glFrustum would generate.
 template <typename T>
@@ -662,6 +683,18 @@ mat<T1, C, R> staticMatCast(const mat<T2, C, R>& m) {
 	mat<T1, C, R> temp;
 	for (std::size_t i = 0; i < C; ++i)
 		temp[i] = staticVecCast<T1>(m[i]);
+	return temp;
+}
+
+
+
+/// Returns the trace of a matrix (sum of the diagonal elements).
+template <typename T, std::size_t N>
+T trace(const mat<T, N, N>& m) {
+	T temp = m[0][0];
+	for (std::size_t i = 1u; i < N; ++i) {
+		temp += m[i][i];
+	}
 	return temp;
 }
 
