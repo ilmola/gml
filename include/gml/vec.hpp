@@ -732,9 +732,21 @@ typedef vec<bool, 2> bvec2;
 typedef vec<bool, 3> bvec3;
 typedef vec<bool, 4> bvec4;
 
-typedef vec<std::size_t, 2> zuvec2;
-typedef vec<std::size_t, 3> zuvec3;
-typedef vec<std::size_t, 4> zuvec4;
+typedef vec<std::size_t, 2> zvec2;
+typedef vec<std::size_t, 3> zvec3;
+typedef vec<std::size_t, 4> zvec4;
+
+typedef vec<char, 2> cvec2;
+typedef vec<char, 3> cvec3;
+typedef vec<char, 4> cvec4;
+
+typedef vec<signed char, 2> scvec2;
+typedef vec<signed char, 3> scvec3;
+typedef vec<signed char, 4> scvec4;
+
+typedef vec<unsigned char, 2> ucvec2;
+typedef vec<unsigned char, 3> ucvec3;
+typedef vec<unsigned char, 4> ucvec4;
 
 }
 
