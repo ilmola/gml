@@ -290,6 +290,11 @@ int main() {
 		EQ(SC, packUnorm<unsigned>(zeros), gml::uvec3{});
 		EQ(SC, packUnorm<unsigned>(ones), gml::uvec3{std::numeric_limits<unsigned>::max()});
 		EQ(SC, unpackUnorm<double>(packUnorm<unsigned>(normalize(v1))), gml::clamp(normalize(v1), zeros, ones));
+		EQ(SC, unpackSnorm<double>(gml::ivec3{}), zeros);
+		EQ(SC, unpackSnorm<double>(gml::ivec3{std::numeric_limits<int>::max()}), ones);
+		EQ(SC, unpackSnorm<double>(gml::ivec3{std::numeric_limits<int>::min()}), -ones);
+		EQ(SC, unpackSnorm<double>(packSnorm<int>(normalize(v1))), normalize(v1));
+		EQ(SC, packSnorm<int>(zeros), gml::ivec3{});
 
 
 		//-Matrices-------------------------------------------------------------

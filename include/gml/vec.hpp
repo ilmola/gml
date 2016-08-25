@@ -730,6 +730,24 @@ vec<TI, N> packUnorm(const vec<TF, N>& v) {
 }
 
 
+/// Component-wise unpackSnorm
+template <typename TF, typename TI, std::size_t N>
+vec<TF, N> unpackSnorm(const vec<TI, N>& v) {
+	vec<TF, N> temp;
+	for (std::size_t i = 0; i < N; ++i) temp[i] = unpackSnorm<TF, TI>(v[i]);
+	return temp;
+}
+
+
+/// Component-wise packSnorm
+template <typename TI, typename TF, std::size_t N>
+vec<TI, N> packSnorm(const vec<TF, N>& v) {
+	vec<TI, N> temp;
+	for (std::size_t i = 0; i < N; ++i) temp[i] = packSnorm<TI, TF>(v[i]);
+	return temp;
+}
+
+
 
 typedef vec<float, 2> vec2;
 typedef vec<float, 3> vec3;
