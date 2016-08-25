@@ -712,6 +712,25 @@ vec<T1, N> staticVecCast(const vec<T2, N>& v) {
 }
 
 
+/// Component-wise unpackUnorm
+template <typename TF, typename TI, std::size_t N>
+vec<TF, N> unpackUnorm(const vec<TI, N>& v) {
+	vec<TF, N> temp;
+	for (std::size_t i = 0; i < N; ++i) temp[i] = unpackUnorm<TF, TI>(v[i]);
+	return temp;
+}
+
+
+/// Component-wise packUnorm
+template <typename TI, typename TF, std::size_t N>
+vec<TI, N> packUnorm(const vec<TF, N>& v) {
+	vec<TI, N> temp;
+	for (std::size_t i = 0; i < N; ++i) temp[i] = packUnorm<TI, TF>(v[i]);
+	return temp;
+}
+
+
+
 typedef vec<float, 2> vec2;
 typedef vec<float, 3> vec3;
 typedef vec<float, 4> vec4;

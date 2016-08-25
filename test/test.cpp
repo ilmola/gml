@@ -50,10 +50,21 @@ inline void EQ(const SourceContext& sc, int a, int b) {
 }
 
 
+inline void EQ(const SourceContext& sc, unsigned a, unsigned b) {
+	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
+}
+
+
 inline void EQ(const SourceContext& sc, double a, double b) {
 	if (!fcmp(a, b)) {
 		std::cout << sc << ": " << a << " != " << b << "\n";
 	}
+}
+
+
+template <std::size_t N>
+void EQ(const SourceContext& sc, const gml::vec<unsigned, N>& a, const gml::vec<unsigned, N>& b) {
+	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
 }
 
 
@@ -272,6 +283,13 @@ int main() {
 		EQ(SC, angle(v1, v1), zero);
 		EQ(SC, project(ones, ones), ones);
 		EQ(SC, transform([] (double x) { return x * x; }, v1), v1 * v1);
+		EQ(SC, unpackUnorm<double>(gml::uvec3{}), zeros);
+		EQ(SC, unpackUnorm<double>(gml::ucvec3{}), zeros);
+		EQ(SC, unpackUnorm<double>(gml::uvec3{std::numeric_limits<unsigned>::max()}), ones);
+		EQ(SC, unpackUnorm<double>(gml::ucvec3{std::numeric_limits<unsigned char>::max()}), ones);
+		EQ(SC, packUnorm<unsigned>(zeros), gml::uvec3{});
+		EQ(SC, packUnorm<unsigned>(ones), gml::uvec3{std::numeric_limits<unsigned>::max()});
+		EQ(SC, unpackUnorm<double>(packUnorm<unsigned>(normalize(v1))), gml::clamp(normalize(v1), zeros, ones));
 
 
 		//-Matrices-------------------------------------------------------------

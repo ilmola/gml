@@ -63,6 +63,51 @@ T repeat(T val, T min, T max)
 }
 
 
+/// Convert an unsigned integral type TI to floating point type TF by mapping it
+/// linearly to range [0.0, 1.0].
+/// @tparam TF Must be a floating point type.
+/// @tparam TI Must be an unsigned integral type.
+template <typename TF, typename TI>
+TF unpackUnorm(TI val) {
+
+	static_assert(
+		std::is_integral<TI>::value && !std::is_signed<TI>::value,
+		"TI must be an unsigned integral type."
+	);
+
+	static_assert(
+		std::is_floating_point<TF>::value,
+		"TF must be a floating point type!"
+	);
+
+	return static_cast<TF>(val) / static_cast<TF>(std::numeric_limits<TI>::max());
+}
+
+
+/// Convert a floating point type to an unsigned integral type by first clamping
+/// it to range [0.0, 1.0] and then mapping it to the full range of the integer.
+/// @tparam TI Must be an unsigned integral type.
+/// @tparam TF Must be a floating point type.
+template <typename TI, typename TF>
+TI packUnorm(TF val) {
+
+	static_assert(
+		std::is_integral<TI>::value && !std::is_signed<TI>::value,
+		"TI must be an unsigned integral type."
+	);
+
+	static_assert(
+		std::is_floating_point<TF>::value,
+		"TF must be a floating point type!"
+	);
+
+	return static_cast<TI>(
+		clamp<TF>(val, static_cast<TF>(0.0), static_cast<TF>(1.0)) *
+		static_cast<TF>(std::numeric_limits<TI>::max()) +
+		static_cast<TF>(0.5)
+	);
+}
+
 
 }
 
