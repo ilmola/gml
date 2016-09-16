@@ -35,7 +35,7 @@ inline std::ostream& operator<<(std::ostream& os, const SourceContext& sc) {
 
 // Check if doubles are close enough to pass test.
 inline bool fcmp(double a, double b) {
-	const double EPSILON = 0.01f;
+	const double EPSILON = 0.01;
 	return std::abs(a - b) <= EPSILON * std::max(std::abs(a), std::abs(b));
 }
 
