@@ -30,6 +30,9 @@ public:
 
 	static_assert(N > 0, "N is zero!");
 
+	/// The type of a single component.
+	using value_type = T;
+
 	/// Initializes all components to zero
 	vec() : vec{T{0}} { }
 

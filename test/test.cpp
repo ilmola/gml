@@ -199,6 +199,9 @@ int main() {
 
 		//-Vectors-------------------------------------------------------------
 
+		EQ(SC, std::is_same<gml::dvec3::value_type, double>::value, true);
+		EQ(SC, std::is_same<gml::ivec2::value_type, int>::value, true);
+
 		// Contructors
 		EQ(SC, dvec3{}, dvec3{zero});
 		EQ(SC, dvec3{scalar}, dvec3{scalar, scalar, scalar});
@@ -299,6 +302,9 @@ int main() {
 
 		//-Matrices-------------------------------------------------------------
 
+		EQ(SC, std::is_same<gml::dmat3::value_type, double>::value, true);
+		EQ(SC, std::is_same<gml::imat2::value_type, int>::value, true);
+
 		// Constructors
 		EQ(SC, dmat4{zero}, ZEROS);
 		EQ(SC, dmat4{M1.data(), true}, M1);
@@ -389,6 +395,9 @@ int main() {
 
 
 		//-Quaternions----------------------------------------------------------
+
+		EQ(SC, std::is_same<gml::dquat::value_type, double>::value, true);
+		EQ(SC, std::is_same<gml::iquat::value_type, int>::value, true);
 
 		// Constructors
 		EQ(SC, dquat{q1.real}.real, q1.real);

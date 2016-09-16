@@ -29,6 +29,9 @@ public:
 	static_assert(C > 0, "Columns is zero.");
 	static_assert(R > 0, "Rows is zero.");
 
+	/// The type of a single component (Not the type of single column!)
+	using value_type = T;
+
 	/// Initialize all components to zero.
 	mat() { }
 

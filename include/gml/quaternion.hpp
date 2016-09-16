@@ -23,6 +23,9 @@ template <typename T>
 class quaternion {
 public:
 
+	/// Type of the real part and a single component of the imaginary part.
+	using value_type = T;
+
 	/// Quaternion with zero real an imaginary parts.
 	quaternion() : real{0}, imag{T{0}} { }
 
