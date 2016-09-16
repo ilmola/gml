@@ -8,6 +8,7 @@
  */
 
 #include <sstream>
+#include <iomanip>
 #include <random>
 
 #include <gml/gml.hpp>
@@ -155,6 +156,7 @@ inline dquat randQ(double min, double max) {
 
 
 
+
 int main() {
 
 	const std::size_t testRuns = 1000;
@@ -176,17 +178,18 @@ int main() {
 	for (std::size_t i=0; i<testRuns; i++) {
 
 		//-Test data-----------------------------------------------------------
+		const double t = rand(0.0, 1.0);
 		const double scalar = rand(min, max);
 		const dvec3 v1 = randVec<3>(min, max);
 		const dvec3 v2 = randVec<3>(min, max);
 		const dvec3 v3 = randVec<3>(min, max);
+		const dvec3 v4 = randVec<3>(min, max);
 		const dmat4 M1 = randMat<4, 4>(min, max);
 		const dmat4 M2 = randMat<4, 4>(min, max);
 		const dmat4 M3 = randMat<4, 4>(min, max);
 		const dquat q1 = randQ(min, max);
 		const dquat q2 = randQ(min, max);
 		const dquat q3 = randQ(min, max);
-
 
 		//-Utils---------------------------------------------------------------
 
@@ -463,6 +466,54 @@ int main() {
 		EQ(SC, transform(qrotate(zeros), v1), v1);
 		EQ(SC, transform(qrotate(dvec3{radians(180.0), zero, zero}), v1), dvec3{v1[0], -v1[1], -v1[2]});
 		EQ(SC, transform(normalize(q1), v1), (normalize(q1) * v1 * conj(normalize(q1))).imag);
+
+
+		//-Splines--------------------------------------------------------------
+
+		auto B3 = [] (gml::dvec3 P0, gml::dvec3 P1, gml::dvec3 P2, gml::dvec3 P3, double t)
+		{
+			return pow(1.0-t,3.0)*P0+3.0*pow(1.0-t,2.0)*t*P1+3.0*(1.0-t)*t*t*P2+pow(t,3.0)*P3;
+		};
+
+		auto dB3 = [] (gml::dvec3 P0, gml::dvec3 P1, gml::dvec3 P2, gml::dvec3 P3, double t)
+		{
+			return 3.0*pow(1.0-t,2.0)*(P1-P0)+6.0*(1.0-t)*t*(P2-P1)+3.0*t*t*(P3-P2);
+		};
+
+		auto ddB3 = [] (gml::dvec3 P0, gml::dvec3 P1, gml::dvec3 P2, gml::dvec3 P3, double t)
+		{
+			return 6.0*(1.0-t)*(P2-2.0*P1+P0)+6.0*t*(P3-2.0*P2+P1);
+		};
+
+		EQ(SC, bezier({v1}, t), v1);
+		EQ(SC, bezier({v1, v2, v3, v4}, zero), v1);
+		EQ(SC, bezier({v1, v2, v3, v4}, one), v4);
+		EQ(SC, bezier({v1, v2}, 0.5), 0.5 * (v1 + v2));
+		EQ(SC, bezier({v1, v2}, t), mix(v1, v2, t));
+		EQ(SC, bezier({v1, v2, v3, v4}, t), B3(v1, v2, v3, v4, t));
+
+		EQ(SC, bezier2({{v1}}, gml::dvec2{t, t}), v1);
+		EQ(SC, bezier2({{v1, v2, v3, v4}}, gml::dvec2{t, 0.0}), B3(v1, v2, v3, v4, t));
+		EQ(SC, bezier2({{v1}, {v2}, {v3}, {v4}}, gml::dvec2{0.0, t}), B3(v1, v2, v3, v4, t));
+		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{0.0, 0.0}), v1);
+		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{1.0, 0.0}), v2);
+		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{0.0, 1.0}), v3);
+		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{1.0, 1.0}), v4);
+		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{0.5, 0.5}), 0.25 * (v1 + v2 + v3 + v4));
+
+		EQ(SC, bezierDerivative<1>({v1}, t), zeros);
+		EQ(SC, bezierDerivative<1>({v1, v2}, t), v2 - v1);
+		EQ(SC, bezierDerivative<2>({v1, v2}, t), zeros);
+		EQ(SC, bezierDerivative<3>({v1, v2}, t), zeros);
+		EQ(SC, bezierDerivative<1>({v1, v2, v3, v4}, t), dB3(v1, v2, v3, v4, t));
+		EQ(SC, bezierDerivative<2>({v1, v2, v3, v4}, t), ddB3(v1, v2, v3, v4, t));
+
+		const auto J = bezier2Jacobian<1>(
+			{{gml::dvec3{0.0, 0.0, 0.0}, gml::dvec3{1.0, 0.0, 0.0}},
+			 {gml::dvec3{0.0, 1.0, 0.0}, gml::dvec3{1.0, 1.0, 0.0}}},
+			gml::dvec2{t, 1.0 - t}
+		);
+		EQ(SC, cross(J[0], J[1]), gml::dvec3{0.0, 0.0, 1.0});
 
 	}
 

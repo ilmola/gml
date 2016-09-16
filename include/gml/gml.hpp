@@ -10,5 +10,6 @@
 #include "vec.hpp"
 #include "quaternion.hpp"
 #include "mat.hpp"
+#include "spline.hpp"
 
 #endif
