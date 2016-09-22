@@ -355,6 +355,13 @@ T determinant(const mat<T, 1, 1>& m) {
 }
 
 
+/// Computes the determinant of a 2x2 matrix
+template <typename T>
+T determinant(const mat<T, 2, 2>& m) {
+	return m[0][0] * m[1][1] - m[1][0] * m[0][1];
+}
+
+
 /// Computes the inverse of a matrix
 template <typename T, std::size_t N>
 mat<T, N, N> inverse(const mat<T, N, N>& m) {
