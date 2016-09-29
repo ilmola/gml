@@ -11,5 +11,6 @@
 #include "quaternion.hpp"
 #include "mat.hpp"
 #include "spline.hpp"
+#include "texture.hpp"
 
 #endif

@@ -48,17 +48,8 @@ inline bool fcmp(double a, double b) {
 }
 
 
-inline void EQ(const SourceContext& sc, const std::string& a, const std::string& b) {
-	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
-}
-
-
-inline void EQ(const SourceContext& sc, int a, int b) {
-	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
-}
-
-
-inline void EQ(const SourceContext& sc, unsigned a, unsigned b) {
+template <typename T>
+inline void EQ(const SourceContext& sc, const T& a, const T& b) {
 	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
 }
 
@@ -181,6 +172,7 @@ int main() {
 	const dmat4 I(1.0);
 	const dmat4 ZEROS;
 	const dquat iq(1);
+
 
 	for (std::size_t i=0; i<testRuns; i++) {
 
@@ -523,6 +515,32 @@ int main() {
 			gml::dvec2{t, 1.0 - t}
 		);
 		EQ(SC, cross(J[0], J[1]), gml::dvec3{0.0, 0.0, 1.0});
+
+
+		//-Texture--------------------------------------------------------------
+
+		EQ(SC, texelCenter<double>(gml::ivec2{0, 0}, gml::zvec2{1u, 2u}), gml::dvec2{0.5, 0.25});
+
+		EQ(SC, nearestTexel<int>(ones, gml::zvec3{1u, 2u, 3u}), gml::ivec3{1,2,3});
+
+		const auto size = abs(staticVecCast<int>(v2)) + 1;
+		EQ(SC,
+			nearestTexel<int>(texelCenter<double>(staticVecCast<int>(v1), size), size),
+			staticVecCast<int>(v1)
+		);
+
+		EQ(SC, faceAt(gml::dvec3{ 1.0,  0.0,  0.0} + 0.01 * v1), 0u);
+		EQ(SC, faceAt(gml::dvec3{-1.0,  0.0,  0.0} + 0.01 * v1), 1u);
+		EQ(SC, faceAt(gml::dvec3{ 0.0,  1.0,  0.0} + 0.01 * v1), 2u);
+		EQ(SC, faceAt(gml::dvec3{ 0.0, -1.0,  0.0} + 0.01 * v1), 3u);
+		EQ(SC, faceAt(gml::dvec3{ 0.0,  0.0,  1.0} + 0.01 * v1), 4u);
+		EQ(SC, faceAt(gml::dvec3{ 0.0,  0.0, -1.0} + 0.01 * v1), 5u);
+
+		EQ(SC, cubeTexCoord(v1).first, cubeTexCoord(normalize(v1)).first);
+		EQ(SC, cubeTexCoord(v1).second, cubeTexCoord(normalize(v1)).second);
+
+		const auto cubeCoord = cubeTexCoord(v1);
+		EQ(SC, normalize(cubeDirection(cubeCoord.first, cubeCoord.second)), normalize(v1));
 
 	}
 

@@ -79,7 +79,7 @@ GLSL-like type aliases for common matrix types are provided. They are named `Tma
 
 For example:
 ~~~c++
-imat4x3 = mat<int, 4, 3> 
+imat4x3 = mat<int, 4, 3>
 mat4 = mat<float, 4, 4>
 ~~~
 
