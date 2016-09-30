@@ -15,6 +15,13 @@
 
 using namespace gml;
 
+template <typename T, std::size_t N>
+using array_t = T[N];
+
+template <typename T, std::size_t N1, std::size_t N2>
+using array2_t = T[N1][N2];
+
+
 
 // Holds context information for a test case.
 // Use macro SC to create one
@@ -485,32 +492,34 @@ int main() {
 			return 6.0*(1.0-t)*(P2-2.0*P1+P0)+6.0*t*(P3-2.0*P2+P1);
 		};
 
-		EQ(SC, bezier({v1}, t), v1);
-		EQ(SC, bezier({v1, v2, v3, v4}, zero), v1);
-		EQ(SC, bezier({v1, v2, v3, v4}, one), v4);
-		EQ(SC, bezier({v1, v2}, 0.5), 0.5 * (v1 + v2));
-		EQ(SC, bezier({v1, v2}, t), mix(v1, v2, t));
-		EQ(SC, bezier({v1, v2, v3, v4}, t), B3(v1, v2, v3, v4, t));
+		EQ(SC, bezier(array_t<dvec3, 1>{v1}, t), v1);
+		EQ(SC, bezier(array_t<dvec3, 4>{v1, v2, v3, v4}, zero), v1);
+		EQ(SC, bezier(array_t<dvec3, 4>{v1, v2, v3, v4}, one), v4);
+		EQ(SC, bezier(array_t<dvec3, 2>{v1, v2}, 0.5), 0.5 * (v1 + v2));
+		EQ(SC, bezier(array_t<dvec3, 2>{v1, v2}, t), mix(v1, v2, t));
+		EQ(SC, bezier(array_t<dvec3, 4>{v1, v2, v3, v4}, t), B3(v1, v2, v3, v4, t));
 
-		EQ(SC, bezier2({{v1}}, gml::dvec2{t, t}), v1);
-		EQ(SC, bezier2({{v1, v2, v3, v4}}, gml::dvec2{t, 0.0}), B3(v1, v2, v3, v4, t));
-		EQ(SC, bezier2({{v1}, {v2}, {v3}, {v4}}, gml::dvec2{0.0, t}), B3(v1, v2, v3, v4, t));
-		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{0.0, 0.0}), v1);
-		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{1.0, 0.0}), v2);
-		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{0.0, 1.0}), v3);
-		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{1.0, 1.0}), v4);
-		EQ(SC, bezier2({{v1, v2}, {v3, v4}}, gml::dvec2{0.5, 0.5}), 0.25 * (v1 + v2 + v3 + v4));
+		EQ(SC, bezier2(array2_t<dvec3, 1, 1>{{v1}}, gml::dvec2{t, t}), v1);
+		EQ(SC, bezier2(array2_t<dvec3, 1, 4>{{v1, v2, v3, v4}}, gml::dvec2{t, 0.0}), B3(v1, v2, v3, v4, t));
+		EQ(SC, bezier2(array2_t<dvec3, 4, 1>{{v1}, {v2}, {v3}, {v4}}, gml::dvec2{0.0, t}), B3(v1, v2, v3, v4, t));
+		EQ(SC, bezier2(array2_t<dvec3, 2, 2>{{v1, v2}, {v3, v4}}, gml::dvec2{0.0, 0.0}), v1);
+		EQ(SC, bezier2(array2_t<dvec3, 2, 2>{{v1, v2}, {v3, v4}}, gml::dvec2{1.0, 0.0}), v2);
+		EQ(SC, bezier2(array2_t<dvec3, 2, 2>{{v1, v2}, {v3, v4}}, gml::dvec2{0.0, 1.0}), v3);
+		EQ(SC, bezier2(array2_t<dvec3, 2, 2>{{v1, v2}, {v3, v4}}, gml::dvec2{1.0, 1.0}), v4);
+		EQ(SC, bezier2(array2_t<dvec3, 2, 2>{{v1, v2}, {v3, v4}}, gml::dvec2{0.5, 0.5}), 0.25 * (v1 + v2 + v3 + v4));
 
-		EQ(SC, bezierDerivative<1>({v1}, t), zeros);
-		EQ(SC, bezierDerivative<1>({v1, v2}, t), v2 - v1);
-		EQ(SC, bezierDerivative<2>({v1, v2}, t), zeros);
-		EQ(SC, bezierDerivative<3>({v1, v2}, t), zeros);
-		EQ(SC, bezierDerivative<1>({v1, v2, v3, v4}, t), dB3(v1, v2, v3, v4, t));
-		EQ(SC, bezierDerivative<2>({v1, v2, v3, v4}, t), ddB3(v1, v2, v3, v4, t));
+		EQ(SC, bezierDerivative<1>(array_t<dvec3, 1>{v1}, t), zeros);
+		EQ(SC, bezierDerivative<1>(array_t<dvec3, 2>{v1, v2}, t), v2 - v1);
+		EQ(SC, bezierDerivative<2>(array_t<dvec3, 2>{v1, v2}, t), zeros);
+		EQ(SC, bezierDerivative<3>(array_t<dvec3, 2>{v1, v2}, t), zeros);
+		EQ(SC, bezierDerivative<1>(array_t<dvec3, 4>{v1, v2, v3, v4}, t), dB3(v1, v2, v3, v4, t));
+		EQ(SC, bezierDerivative<2>(array_t<dvec3, 4>{v1, v2, v3, v4}, t), ddB3(v1, v2, v3, v4, t));
 
 		const auto J = bezier2Jacobian<1>(
-			{{gml::dvec3{0.0, 0.0, 0.0}, gml::dvec3{1.0, 0.0, 0.0}},
-			 {gml::dvec3{0.0, 1.0, 0.0}, gml::dvec3{1.0, 1.0, 0.0}}},
+			array2_t<dvec3, 2, 2>{
+				{gml::dvec3{0.0, 0.0, 0.0}, gml::dvec3{1.0, 0.0, 0.0}},
+				{gml::dvec3{0.0, 1.0, 0.0}, gml::dvec3{1.0, 1.0, 0.0}}
+			},
 			gml::dvec2{t, 1.0 - t}
 		);
 		EQ(SC, cross(J[0], J[1]), gml::dvec3{0.0, 0.0, 1.0});
