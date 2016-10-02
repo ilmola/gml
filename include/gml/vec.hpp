@@ -462,6 +462,8 @@ vec<T, N> project(const vec<T, N>& v, const vec<T, N>& u) {
 
 
 /// Calculate the refraction direction for an incident vector
+/// @param v The incident vector
+/// @param n The normal vector
 /// @param eta Index of refraction
 template <typename T, std::size_t N>
 vec<T, N> refract(const vec<T, N>& v, const vec<T, N>& n, const T& eta) {

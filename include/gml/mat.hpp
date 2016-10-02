@@ -59,6 +59,7 @@ public:
 	/// Initialize from a c-array.
 	/// The array must have at least C*R components or behaviour is undefined.
 	/// If data is null assertion error will occur.
+	/// @param data Pointer to the first element.
 	/// @param columnMajor Are the components in the input in column major order
 	mat(const T* data, bool columnMajor) {
 		assert( data != nullptr );
@@ -101,8 +102,9 @@ public:
 	}
 
 	/// Creates a sub matrix by removing a row and a column
-	/// @param col zero based index of the column to remove
-	/// @param row zero based index of the row to remove
+	/// @param m Input matrix.
+	/// @param col Zero based index of the column to remove
+	/// @param row Zero based index of the row to remove
 	mat(const mat<T, C+1, R+1>& m, std::size_t col, std::size_t row) {
 		assert(col <= C && row <= R);
 		for (std::size_t i = 0; i < C; ++i) {

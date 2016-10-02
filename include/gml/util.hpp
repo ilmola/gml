@@ -33,8 +33,9 @@ T clamp(T val, T minVal, T maxVal) {
 
 
 /// Wraps a value around to the given interval
-/// @param min start point of the interval inclusive
-/// @param max end point of the interval exclusive
+/// @param val Value to wrap to the given interval.
+/// @param min Start point of the interval (inclusive)
+/// @param max End point of the interval (exclusive)
 template <
 	typename T,
 	typename std::enable_if<!std::is_integral<T>::value, int>::type = 0
@@ -43,14 +44,15 @@ T repeat(T val, T min, T max)
 {
 	using std::fmod;
 	T temp = fmod(val - min, max - min);
-	if (temp < T{0}) temp += max - min;
+	if (temp < static_cast<T>(0)) temp += max - min;
 	return temp + min;
 }
 
 
 /// Wraps a value around to the given interval
-/// @param min start point of the interval inclusive
-/// @param max end point of the interval exclusive
+/// @param val Value to wrap to the given interval.
+/// @param min Start point of the interval (inclusive)
+/// @param max End point of the interval (exclusive)
 template <
 	typename T,
 	typename std::enable_if<std::is_integral<T>::value, int>::type = 0
@@ -58,7 +60,7 @@ template <
 T repeat(T val, T min, T max)
 {
 	T temp = (val - min) % (max - min);
-	if (temp < T{0}) temp += max - min;
+	if (temp < static_cast<T>(0)) temp += max - min;
 	return temp + min;
 }
 
