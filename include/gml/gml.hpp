@@ -12,5 +12,6 @@
 #include "mat.hpp"
 #include "spline.hpp"
 #include "texture.hpp"
+#include "intersect.hpp"
 
 #endif

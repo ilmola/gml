@@ -542,6 +542,28 @@ int main() {
 		const auto cubeCoord = cubeTexCoord(v1);
 		EQ(SC, normalize(cubeDirection(cubeCoord.first, cubeCoord.second)), normalize(v1));
 
+
+
+		//-Intersect------------------------------------------------------------
+		{
+			const auto intersection = intersectRayPlane(v1, dvec3{0.0, 0.0, -1.0}, v2, dvec3{0.0, 0.0, 1.0});
+			EQ(SC, std::get<0>(intersection), true);
+			EQ(SC, std::get<1>(intersection), v1[2] - v2[2]);
+		}
+
+		{
+			const auto intersection = intersectRayPlane(v1, dvec3{1.0, 0.0, 0.0}, v2, dvec3{0.0, 0.0, 1.0});
+			EQ(SC, std::get<0>(intersection), false);
+		}
+
+		{
+			const auto intersection = intersectRaySphere(
+				dvec3{0.0, 0.0, v1[0]}, dvec3{0.0, 0.0, -1.0}, dvec3{0.0, 0.0, v2[0]}, std::abs(scalar)
+			);
+			EQ(SC, std::get<0>(intersection), true);
+			EQ(SC, std::get<1>(intersection), v1[0] - (v2[0] + std::abs(scalar)));
+			EQ(SC, std::get<2>(intersection), v1[0] - (v2[0] - std::abs(scalar)));
+		}
 	}
 
 	std::cout << "All tests done.\n";
