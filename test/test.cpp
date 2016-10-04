@@ -215,10 +215,10 @@ int main() {
 
 		// Cast
 		EQ(SC,
-			staticVecCast<int>(v1),
+			static_vec_cast<int>(v1),
 			ivec3{static_cast<int>(v1[0]), static_cast<int>(v1[1]), static_cast<int>(v1[2])}
 		);
-		EQ(SC, staticVecCast<double>(v1), v1);
+		EQ(SC, static_vec_cast<double>(v1), v1);
 
 		// Iteration
 		std::size_t index = 0;
@@ -318,14 +318,14 @@ int main() {
 		EQ(SC, dmat2{dmat4x2{dmat2x4{M1}}}, dmat2{M1});
 
 		// Casts
-		EQ(SC, staticMatCast<double>(M1), M1);
+		EQ(SC, static_mat_cast<double>(M1), M1);
 		EQ(SC,
-			staticMatCast<int>(M1),
+			static_mat_cast<int>(M1),
 			imat4{
-				staticVecCast<int>(M1[0]),
-				staticVecCast<int>(M1[1]),
-				staticVecCast<int>(M1[2]),
-				staticVecCast<int>(M1[3])
+				static_vec_cast<int>(M1[0]),
+				static_vec_cast<int>(M1[1]),
+				static_vec_cast<int>(M1[2]),
+				static_vec_cast<int>(M1[3])
 			}
 		);
 
@@ -408,10 +408,10 @@ int main() {
 		EQ(SC, dquat{q1}, q1);
 
 		// Casts
-		EQ(SC, staticQuaternionCast<double>(q1), q1);
+		EQ(SC, static_quaternion_cast<double>(q1), q1);
 		EQ(SC,
-			staticQuaternionCast<int>(q1),
-			iquat{static_cast<int>(q1.real), staticVecCast<int>(q1.imag)}
+			static_quaternion_cast<int>(q1),
+			iquat{static_cast<int>(q1.real), static_vec_cast<int>(q1.imag)}
 		);
 
 		// Quaternion operators
@@ -523,10 +523,10 @@ int main() {
 
 		EQ(SC, nearestTexel<int>(ones, gml::zvec3{1u, 2u, 3u}), gml::ivec3{1,2,3});
 
-		const auto size = abs(staticVecCast<int>(v2)) + 1;
+		const auto size = abs(static_vec_cast<int>(v2)) + 1;
 		EQ(SC,
-			nearestTexel<int>(texelCenter<double>(staticVecCast<int>(v1), size), size),
-			staticVecCast<int>(v1)
+			nearestTexel<int>(texelCenter<double>(static_vec_cast<int>(v1), size), size),
+			static_vec_cast<int>(v1)
 		);
 
 		EQ(SC, faceAt(gml::dvec3{ 1.0,  0.0,  0.0} + 0.01 * v1), 0u);

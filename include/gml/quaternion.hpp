@@ -321,8 +321,8 @@ quaternion<T> inverse(const quaternion<T>& q) {
 
 /// Static cast each component from T2 to T1.
 template <typename T1, typename T2>
-quaternion<T1> staticQuaternionCast(const quaternion<T2>& q) {
-	return quaternion<T1>{static_cast<T1>(q.real), staticVecCast<T1>(q.imag)};
+quaternion<T1> static_quaternion_cast(const quaternion<T2>& q) {
+	return quaternion<T1>{static_cast<T1>(q.real), static_vec_cast<T1>(q.imag)};
 }
 
 

@@ -709,7 +709,7 @@ vec<T, N> degrees(const vec<T, N>& v) {
 
 /// Static cast each component from T2 to T1.
 template <typename T1, typename T2, std::size_t N>
-vec<T1, N> staticVecCast(const vec<T2, N>& v) {
+vec<T1, N> static_vec_cast(const vec<T2, N>& v) {
 	vec<T1, N> temp;
 	for (std::size_t i = 0; i < N; ++i)
 		temp[i] = static_cast<T1>(v[i]);
