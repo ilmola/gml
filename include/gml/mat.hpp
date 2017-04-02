@@ -13,6 +13,7 @@
 #include <sstream>
 #include <string>
 
+#include "vec.hpp"
 
 namespace gml {
 
@@ -607,64 +608,90 @@ mat<T, 4, 4> lookAt(
 }
 
 
-/// Map object coordinates to window coordinates.
-/// Same as gluProject
-template <typename T>
+/// Map object coordinates to window coordinates (same as gluProject).
+/// @param v Object coordinates to project.
+/// @param modelView The model view matrix
+/// @param proj The projection matrix
+/// @param viewportOrigin Lower left corner of the viewport.
+/// @param viewportSize Size of the viewport
+template <typename T, typename TI, typename TS>
 vec<T, 3> project(
-	const vec<T, 3>& v, const mat<T, 4, 4>& modelView,
-	const mat<T, 4, 4>& proj, const ivec4& viewport
+	const vec<T, 3>& v,
+	const mat<T, 4, 4>& modelView, const mat<T, 4, 4>& proj,
+	const vec<TI, 2>& viewportOrigin, const vec<TS, 2>& viewportSize
 ) {
-	return project(v, proj * modelView, viewport);
+	return project(v, proj * modelView, viewportOrigin, viewportSize);
 }
 
 
-/// Map object coordinates to window coordinates.
-/// Same as gluProject.
-template <typename T>
+/// Map object coordinates to window coordinates (same as gluProject).
+/// @param v Object coordinates to project.
+/// @param modelViewProj The model view projection matrix (proj * modelView).
+/// @param viewportOrigin Lower left corner of the viewport.
+/// @param viewportSize Size of the viewport
+template <typename T, typename TI, typename TS>
 vec<T, 3> project(
-	const vec<T, 3>& v, const mat<T, 4, 4>& modelViewNroj,
-	const ivec4& viewport
+	const vec<T, 3>& v,
+	const mat<T, 4, 4>& modelViewProj,
+	const vec<TI, 2>& viewportOrigin, const vec<TS, 2>& viewportSize
 ) {
-	vec<T, 4> in = modelViewNroj * vec<T, 4>{v, T{1}};
+	vec<T, 4> in = modelViewProj * vec<T, 4>{v, static_cast<T>(1)};
 
 	in[0] /= in[3];
 	in[1] /= in[3];
 	in[2] /= in[3];
 
-	in[0] = in[0] * T{0.5} + T{0.5};
-	in[1] = in[1] * T{0.5} + T{0.5};
-	in[2] = in[2] * T{0.5} + T{0.5};
+	const T half = static_cast<T>(0.5);
 
-	in[0] = in[0] * viewport[2] + viewport[0];
-	in[1] = in[1] * viewport[3] + viewport[1];
+	in[0] = in[0] * half + half;
+	in[1] = in[1] * half + half;
+	in[2] = in[2] * half + half;
 
-	return vec<T, 3>{in, 3};
+	in[0] = in[0] * static_cast<T>(viewportSize[0]) + static_cast<T>(viewportOrigin[0]);
+	in[1] = in[1] * static_cast<T>(viewportSize[1]) + static_cast<T>(viewportOrigin[1]);
+
+	return vec<T, 3>{in, 3u};
 }
 
 
-/// Same as gluUnProject.
-template <typename T>
+/// Map window coordinates to object coordinates (same as gluUnProject).
+/// @param v Window coordinates to map.
+/// @param modelView The model view matrix.
+/// @param proj The projection matrix.
+/// @param viewportOrigin Lower left corner of the viewport.
+/// @param viewportSize Size of the viewport
+template <typename T, typename TI, typename TS>
 vec<T, 3> unProject(
-	const vec<T, 3>& v, const mat<T, 4, 4>& modelView,
-	const mat<T, 4, 4>& proj, const ivec4& viewport
+	const vec<T, 3>& v,
+	const mat<T, 4, 4>& modelView, const mat<T, 4, 4>& proj,
+	const vec<TI, 2>& viewportOrigin, const vec<TS, 2>& viewportSize
 ) {
-	return unProject(v, inverse(proj * modelView), viewport);
+	return unProject(v, inverse(proj * modelView), viewportOrigin, viewportSize);
 }
 
 
-/// unProject with known inverse of ModelViewProj
-template <typename T>
+/// Map window coordinates to object coordinates (same as gluUnProject).
+/// @param v Window coordinates to map.
+/// @param invModelViewProj Inverse model view projection matrix (proj * modelView)^-1.
+/// @param viewportOrigin Lower left corner of the viewport.
+/// @param viewportSize Size of the viewport
+template <typename T, typename TI, typename TS>
 vec<T, 3> unProject(
-	const vec<T, 3>& v, const mat<T, 4, 4>& invModelViewProj, const ivec4& viewport
+	const vec<T, 3>& v,
+	const mat<T, 4, 4>& invModelViewProj,
+	const vec<TI, 2>& viewportOrigin, const vec<TS, 2>& viewportSize
 ) {
-	vec<T, 4> in{v, T{1}};
+	vec<T, 4> in{v, static_cast<T>(1)};
 
-	in[0] = (in[0] - viewport[0]) / viewport[2];
-	in[1] = (in[1] - viewport[1]) / viewport[3];
+	in[0] = (in[0] - static_cast<T>(viewportOrigin[0])) / static_cast<T>(viewportSize[0]);
+	in[1] = (in[1] - static_cast<T>(viewportOrigin[1])) / static_cast<T>(viewportSize[1]);
 
-	in[0] = in[0] * T{2} - T{1};
-	in[1] = in[1] * T{2} - T{1};
-	in[2] = in[2] * T{2} - T{1};
+	const T one = static_cast<T>(1);
+	const T two = static_cast<T>(2);
+
+	in[0] = in[0] * two - one;
+	in[1] = in[1] * two - one;
+	in[2] = in[2] * two - one;
 
 	vec<T, 4> out = invModelViewProj * in;
 
@@ -672,7 +699,7 @@ vec<T, 3> unProject(
 	out[1] /= out[3];
 	out[2] /= out[3];
 
-	return vec<T, 3>{out, 3};
+	return vec<T, 3>{out, 3u};
 }
 
 

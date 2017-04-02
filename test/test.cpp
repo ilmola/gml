@@ -393,7 +393,10 @@ int main() {
 		EQ(SC, rotate(dvec3{scalar, zero, zero}), rotate(scalar, dvec3{one, zero, zero}));
 		EQ(SC, ortho(-one, one, -one, one, one, -one), I);
 		EQ(SC, lookAt(zeros, dvec3{zero, zero, -one}, dvec3{zero, one, zero}), I);
-		EQ(SC, project(dvec3{zero, zero, -one}, I, perspective(one, one, one, 2.0), ivec4{-1, -1, 2, 2}), zeros);
+
+		const auto tempProj = perspective(one, one, one, 2.0);
+		EQ(SC, project(dvec3{zero, zero, -one}, I, tempProj, ivec2{-1, -1}, ivec2{2, 2}), zeros);
+		EQ(SC, unProject(zeros, I, tempProj, ivec2{-1, -1}, ivec2{2, 2}), dvec3{zero, zero, -one});
 
 
 		//-Quaternions----------------------------------------------------------
