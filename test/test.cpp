@@ -549,6 +549,14 @@ int main() {
 
 		//-Intersect------------------------------------------------------------
 		{
+			const ivec2 mpos{static_vec_cast<int>(v1)};
+			const auto proj = ortho2D(-1.0, 1.0, -1.0, 1.0);
+			const auto ray = pickRay(mpos, I, proj, mpos, ivec2{2});
+			EQ(SC, std::get<0>(ray), dvec3{-0.5, -0.5, 1.0});
+			EQ(SC, std::get<1>(ray), dvec3{0.0, 0.0, -1.0});
+		}
+
+		{
 			const auto intersection = intersectRayPlane(v1, dvec3{0.0, 0.0, -1.0}, v2, dvec3{0.0, 0.0, 1.0});
 			EQ(SC, std::get<0>(intersection), true);
 			EQ(SC, std::get<1>(intersection), v1[2] - v2[2]);

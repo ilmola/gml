@@ -8,9 +8,60 @@
 #include <tuple>
 
 #include "vec.hpp"
+#include "mat.hpp"
 
 
 namespace gml {
+
+
+
+/// Compute a pickray for mouse coordinates.
+/// @param mpos The mouse coordinates relative to the BOTTOM left corner of the screen.
+/// @param view The view matrix
+/// @param proj The projection matrix
+/// @param viewportOrigin Bottom left corner of the viewport
+/// @param viewportSize Size of the viewport
+/// @return Ray origin and unit length ray direction vector.
+template <typename T, typename TI, typename TS>
+std::tuple<vec<T, 3>, vec<T, 3>> pickRay(
+	const vec<TI, 2>& mpos,
+	const mat<T, 4, 4>& view, const mat<T, 4, 4>& proj,
+	const vec<TI, 2>& viewportOrigin, const vec<TS, 2>& viewportSize
+) {
+	return pickRay(mpos, inverse(proj * view), viewportOrigin, viewportSize);
+}
+
+
+/// Compute a pickray for mouse coordinates.
+/// @param mpos The mouse coordinates relative to the BOTTOM left corner of the screen.
+/// @param invProjView Inverse view projection matrix: (proj*view)^-1
+/// @param viewportOrigin Bottom left corner of the viewport
+/// @param viewportSize Size of the viewport
+/// @return Ray origin and unit length ray direction vector.
+template <typename T, typename TI, typename TS>
+std::tuple<vec<T, 3>, vec<T, 3>> pickRay(
+	const vec<TI, 2>& mpos,
+	const mat<T, 4, 4>& invProjView,
+	const vec<TI, 2>& viewportOrigin, const vec<TS, 2>& viewportSize
+) {
+	const T zero = static_cast<T>(0);
+	const T one  = static_cast<T>(1);
+	const T half = static_cast<T>(0.5);
+
+	const vec<T, 2> fmpos{
+		static_cast<T>(mpos[0]) + half, static_cast<T>(mpos[1]) + half
+	};
+
+	const vec<T, 3> frontPos = unProject(
+		vec<T, 3>{fmpos, zero}, invProjView, viewportOrigin, viewportSize
+	);
+
+	const vec<T, 3> backPos = unProject(
+		vec<T, 3>{fmpos, one}, invProjView, viewportOrigin, viewportSize
+	);
+
+	return std::make_tuple(frontPos, normalize(backPos - frontPos));
+}
 
 
 /// Computes the intersection of a ray and a N-plane.
