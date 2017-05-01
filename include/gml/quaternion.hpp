@@ -12,6 +12,8 @@
 #include <sstream>
 #include <string>
 
+#include "vec.hpp"
+
 namespace gml {
 
 

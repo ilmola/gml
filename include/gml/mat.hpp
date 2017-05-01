@@ -14,6 +14,7 @@
 #include <string>
 
 #include "vec.hpp"
+#include "quaternion.hpp"
 
 namespace gml {
 
