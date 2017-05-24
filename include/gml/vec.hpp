@@ -277,16 +277,6 @@ private:
 };
 
 
-/// Applies the given function fn to each component
-template <typename T, int N, typename F>
-vec<T, N> transform(F fn, const vec<T, N>& v) {
-	vec<T, N> temp;
-	for (int i = 0; i < N; ++i) {
-		temp[i] = fn(v[i]);
-	}
-	return temp;
-}
-
 
 /// Negates all components
 template <typename T, int N>

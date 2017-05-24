@@ -287,7 +287,6 @@ int main() {
 		EQ(SC, distance(zeros, v1), length(v1));
 		EQ(SC, angle(v1, v1), zero);
 		EQ(SC, project(ones, ones), ones);
-		EQ(SC, transform([] (double x) { return x * x; }, v1), v1 * v1);
 		EQ(SC, unpackUnorm<double>(gml::uvec3{}), zeros);
 		EQ(SC, unpackUnorm<double>(gml::ucvec3{}), zeros);
 		EQ(SC, unpackUnorm<double>(gml::uvec3{std::numeric_limits<unsigned>::max()}), ones);
