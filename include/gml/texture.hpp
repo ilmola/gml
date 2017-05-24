@@ -41,11 +41,11 @@ TF texelCenter(TI index, TS size)
 /// @tparam TS Type of the size. Must be an integral type.
 /// @param index Texel index in the texture.
 /// @param size Size of the texture in texels.
-template <typename TF, typename TI, typename TS, std::size_t N>
+template <typename TF, typename TI, typename TS, int N>
 gml::vec<TF, N> texelCenter(const gml::vec<TI, N>& index, const gml::vec<TS, N>& size)
 {
 	gml::vec<TF, N> temp;
-	for (std::size_t i = 0; i < N; ++i) {
+	for (int i = 0; i < N; ++i) {
 		temp[i] = texelCenter<TF>(index[i], size[i]);
 	};
 	return temp;
@@ -80,7 +80,7 @@ TI nearestTexel(TF coord, TS size)
 /// @tparam TS Type of the size. Must be an integral type.
 /// @param coord The texture coordinate.
 /// @param size Size of the texture in texels.
-template <typename TI, typename TF, typename TS, std::size_t N>
+template <typename TI, typename TF, typename TS, int N>
 vec<TI, N> nearestTexel(const vec<TF, N>& coord, const vec<TS, N>& size)
 {
 	static_assert(std::is_integral<TI>::value, "TI must an integral type.");
@@ -88,7 +88,7 @@ vec<TI, N> nearestTexel(const vec<TF, N>& coord, const vec<TS, N>& size)
 	static_assert(std::is_floating_point<TF>::value, "TF must a floating point type.");
 
 	vec<TI, N> temp;
-	for (std::size_t i = 0; i < N; ++i) {
+	for (int i = 0; i < N; ++i) {
 		temp[i] = nearestTexel<TI>(coord[i], size[i]);
 	}
 	return temp;
@@ -99,7 +99,7 @@ vec<TI, N> nearestTexel(const vec<TF, N>& coord, const vec<TS, N>& size)
 /// @param direction The direction vector. Need not be normalized.
 /// @return 0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z.
 template <typename TF>
-std::size_t faceAt(const gml::vec<TF, 3>& direction)
+int faceAt(const gml::vec<TF, 3>& direction)
 {
 	static_assert(std::is_floating_point<TF>::value, "TF must a floating point type.");
 
@@ -137,7 +137,7 @@ std::size_t faceAt(const gml::vec<TF, 3>& direction)
 /// @param direction The direction vector. Need not be normalized.
 /// @return 0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z.
 template <typename TF>
-std::pair<std::size_t, gml::vec<TF, 2>> cubeTexCoord(const gml::vec<TF, 3>& direction)
+std::pair<int, gml::vec<TF, 2>> cubeTexCoord(const gml::vec<TF, 3>& direction)
 {
 	static_assert(std::is_floating_point<TF>::value, "TF must a floating point type.");
 
@@ -162,7 +162,7 @@ std::pair<std::size_t, gml::vec<TF, 2>> cubeTexCoord(const gml::vec<TF, 3>& dire
 	// +rz          GL_TEXTURE_CUBE_MAP_POSITIVE_Z   +rx    -ry   rz
 	// -rz          GL_TEXTURE_CUBE_MAP_NEGATIVE_Z   -rx    -ry   rz
 
-	const std::size_t face = faceAt(direction);
+	const int face = faceAt(direction);
 	switch (face) {
 	case 0: // +x
 		return std::make_pair(face, fn(-direction[2], -direction[1], direction[0]));
@@ -192,7 +192,7 @@ std::pair<std::size_t, gml::vec<TF, 2>> cubeTexCoord(const gml::vec<TF, 3>& dire
 /// @param texCoord Texture coordinate in the given face.
 /// @return Direction vector. The vector is not normalized.
 template <typename TF>
-gml::vec<TF, 3> cubeDirection(std::size_t faceIndex, const gml::vec<TF, 2>& texCoord)
+gml::vec<TF, 3> cubeDirection(int faceIndex, const gml::vec<TF, 2>& texCoord)
 {
 	static_assert(std::is_floating_point<TF>::value, "TF must a floating point type.");
 

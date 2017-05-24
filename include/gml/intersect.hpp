@@ -74,7 +74,7 @@ std::tuple<vec<T, 3>, vec<T, 3>> pickRay(
 /// intersection (true) or not (false, when the ray is parallel to the plane)
 /// and a scalar denoting the distance to the intersection point (positive or
 /// negative depending if the point is in front of or behind the origin).
-template <typename T, std::size_t N>
+template <typename T, int N>
 std::tuple<bool, T> intersectRayPlane(
 	const vec<T, N>& origin, const vec<T, N>& direction,
 	const vec<T, N>& center, const vec<T, N>& normal
@@ -104,7 +104,7 @@ std::tuple<bool, T> intersectRayPlane(
 /// intersection (true) or not (false) and two scalars denoting the distances to
 /// the front and back intersection points (positive or negative depending if
 /// the point is in front of or behind the origin).
-template <typename T, std::size_t N>
+template <typename T, int N>
 std::tuple<bool, T, T> intersectRaySphere(
 	const vec<T, N>& origin, const vec<T, N>& direction,
 	const vec<T, N>& center, T radius

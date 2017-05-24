@@ -15,9 +15,9 @@ namespace gml {
 
 namespace detail {
 
-template <typename T, std::size_t N>
+template <typename T, int N>
 vec<T, N> bezierImpl(
-	const vec<T, N>* p, std::size_t n, T t1, T t2, std::size_t stride = 1
+	const vec<T, N>* p, int n, T t1, T t2, int stride = 1
 ) {
 	if (n == 1) return *p;
 	if (n == 2) return t1 * p[0] + t2 * p[stride];
@@ -33,7 +33,7 @@ vec<T, N> bezierImpl(
 /// @tparam D The number of control points.
 /// @param p Control points.
 /// @param t Interpolation value [0-1].
-template <std::size_t D, typename T, std::size_t N>
+template <int D, typename T, int N>
 vec<T, N> bezier(const vec<T, N> (&p)[D], T t)
 {
 	static_assert(D > 0, "At least one control point needed.");
@@ -47,7 +47,7 @@ vec<T, N> bezier(const vec<T, N> (&p)[D], T t)
 /// @tparam D1 The number of control points along t[1] direction.
 /// @param p Control points.
 /// @param t Interpolation value [0-1].
-template <std::size_t D0, std::size_t D1, typename T, std::size_t N>
+template <int D0, int D1, typename T, int N>
 vec<T, N> bezier2(
 	const vec<T, N> (&p)[D1][D0], const vec<T, 2>& t
 ) {
@@ -55,7 +55,7 @@ vec<T, N> bezier2(
 	static_assert(D1 > 0, "At least one control point needed.");
 
 	vec<T, N> temp[D1];
-	for (std::size_t i = 0; i < D1; ++i) {
+	for (int i = 0; i < D1; ++i) {
 		temp[i] = bezier(p[i], t[0]);
 	}
 	return bezier(temp, t[1]);
@@ -64,12 +64,12 @@ vec<T, N> bezier2(
 
 namespace detail {
 
-template <std::size_t O, std::size_t D, typename T, std::size_t N>
+template <int O, int D, typename T, int N>
 struct bezierDerivativeImpl {
 	static vec<T, N> calc(const vec<T, N> (&p)[D], T t)
 	{
 		vec<T, N> temp[D - 1];
-		for (std::size_t i = 0; i < D - 1; ++i) {
+		for (int i = 0; i < D - 1; ++i) {
 			temp[i] = static_cast<T>(D - 1) * (p[i + 1] - p[i]);
 		}
 
@@ -78,7 +78,7 @@ struct bezierDerivativeImpl {
 };
 
 
-template <std::size_t D, typename T, std::size_t N>
+template <int D, typename T, int N>
 struct bezierDerivativeImpl<0, D, T, N> {
 	static vec<T, N> calc(const vec<T, N> (&p)[D], T t)
 	{
@@ -86,7 +86,7 @@ struct bezierDerivativeImpl<0, D, T, N> {
 	}
 };
 
-template <typename T, std::size_t N>
+template <typename T, int N>
 struct bezierDerivativeImpl<0, 1, T, N> {
 	static vec<T, N> calc(const vec<T, N> (&p)[1], T t)
 	{
@@ -94,7 +94,7 @@ struct bezierDerivativeImpl<0, 1, T, N> {
 	}
 };
 
-template <std::size_t O, typename T, std::size_t N>
+template <int O, typename T, int N>
 struct bezierDerivativeImpl<O, 1, T, N> {
 	static vec<T, N> calc(const vec<T, N> (&)[1], T)
 	{
@@ -112,7 +112,7 @@ struct bezierDerivativeImpl<O, 1, T, N> {
 /// @tparam D The number of control points.
 /// @param p Control points.
 /// @param t Interpolation value [0-1].
-template <std::size_t O, std::size_t D, typename T, std::size_t N>
+template <int O, int D, typename T, int N>
 vec<T, N> bezierDerivative(const vec<T, N> (&p)[D], T t)
 {
 	static_assert(O > 0, "The derivative order must be at least one.");
@@ -131,7 +131,7 @@ vec<T, N> bezierDerivative(const vec<T, N> (&p)[D], T t)
 /// @tparam D1 The number of control points along the t[1] direction.
 /// @param p Control points.
 /// @param t Interpolation value [0-1].
-template <std::size_t O, std::size_t D0, std::size_t D1, typename T, std::size_t N>
+template <int O, int D0, int D1, typename T, int N>
 mat<T, 2, N> bezier2Jacobian(
 	const vec<T, N> (&p)[D1][D0], const vec<T, 2u>& t
 ) {
@@ -140,12 +140,12 @@ mat<T, 2, N> bezier2Jacobian(
 	static_assert(D1 > 0, "At least one control point needed.");
 
 	vec<T, N> temp0[D0];
-	for (std::size_t i = 0; i < D0; ++i) {
+	for (int i = 0; i < D0; ++i) {
 		temp0[i] = detail::bezierImpl(&p[0][i], D1, static_cast<T>(1) - t[1], t[1], D0);
 	}
 
 	vec<T, N> temp1[D1];
-	for (std::size_t i = 0; i < D1; ++i) {
+	for (int i = 0; i < D1; ++i) {
 		temp1[i] = bezier(p[i], t[0]);
 	}
 

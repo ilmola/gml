@@ -24,12 +24,12 @@ namespace gml {
  * @tparam C Number of columns
  * @tparam R Number of rows (length of column vectors)
  */
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 class mat {
 public:
 
-	static_assert(C > 0, "Columns is zero.");
-	static_assert(R > 0, "Rows is zero.");
+	static_assert(C > 0, "Columns must be greater than zero!");
+	static_assert(R > 0, "Rows must be greater than zero!");
 
 	/// The type of a single component (Not the type of single column!)
 	using value_type = T;
@@ -39,12 +39,12 @@ public:
 
 	/// Initialize the diagonal to given value and 0 elsewhere
 	explicit mat(const T& a) {
-		for (std::size_t i = 0; i < std::min(C, R); ++i) data_[i][i] = a;
+		for (int i = 0; i < std::min(C, R); ++i) data_[i][i] = a;
 	}
 
 	/// Initialize all columns to v.
 	explicit mat(const vec<T, R>& v) {
-		for (std::size_t i = 0; i < C; ++i) data_[i] = v;
+		for (int i = 0; i < C; ++i) data_[i] = v;
 	}
 
 	/// Initialize from C column vectors with R components each.
@@ -66,13 +66,13 @@ public:
 	mat(const T* data, bool columnMajor) {
 		assert( data != nullptr );
 		if (columnMajor) {
-			for (std::size_t i = 0; i < C; ++i) {
+			for (int i = 0; i < C; ++i) {
 				data_[i] = vec<T, R>(&data[i * R]);
 			}
 		}
 		else {
-			for (std::size_t i = 0; i < C; ++i) {
-				for (std::size_t j = 0; j < R; ++j) {
+			for (int i = 0; i < C; ++i) {
+				for (int j = 0; j < R; ++j) {
 					data_[i][j] = data[j * C + i];
 				}
 			}
@@ -82,34 +82,34 @@ public:
 	/// Initialize from a smaller matrix by adding given value to the diagonal
 	/// and zero elsewhere.
 	template <
-		std::size_t CC, std::size_t RR,
+		int CC, int RR,
 		typename std::enable_if<(CC < C || RR < R), int>::type = 0
 	>
 	explicit mat(const mat<T, CC, RR>& m, const T& a = T{0}) {
-		for (std::size_t i = 0; i < std::min(C, CC); ++i) {
+		for (int i = 0; i < std::min(C, CC); ++i) {
 			data_[i] = vec<T, R>{m[i]};
 		}
-		for (std::size_t i = std::min(CC, RR); i < std::min(C, R); ++i) {
+		for (int i = std::min(CC, RR); i < std::min(C, R); ++i) {
 			data_[i][i] = a;
 		}
 	}
 
 	/// Initialize from bigger matrix by dropping trailing rows and columns.
 	template <
-		std::size_t CC, std::size_t RR,
+		int CC, int RR,
 		typename std::enable_if<((CC != C || RR != R) && CC >= C && RR >= R), int>::type = 0
 	>
 	explicit mat(const mat<T, CC, RR>& m) {
-		for (std::size_t i = 0; i < C; ++i) data_[i] = vec<T, R>{m[i]};
+		for (int i = 0; i < C; ++i) data_[i] = vec<T, R>{m[i]};
 	}
 
 	/// Creates a sub matrix by removing a row and a column
 	/// @param m Input matrix.
 	/// @param col Zero based index of the column to remove
 	/// @param row Zero based index of the row to remove
-	mat(const mat<T, C+1, R+1>& m, std::size_t col, std::size_t row) {
+	mat(const mat<T, C+1, R+1>& m, int col, int row) {
 		assert(col <= C && row <= R);
-		for (std::size_t i = 0; i < C; ++i) {
+		for (int i = 0; i < C; ++i) {
 			if (i < col) data_[i] = vec<T, R>{m[i], row};
 			else data_[i] = vec<T, R>{m[i+1], row};
 		}
@@ -124,16 +124,16 @@ public:
 	mat& operator=(mat&&) = default;
 
 	/// Returns a reference to the i:th column vector.
-	/// If i is not smaller than C assertion error will occur.
-	const vec<T, R>& operator[](std::size_t i) const noexcept {
-		assert(i < C);
+	/// If i is not in the range [0, C) and assertion failure will occur.
+	const vec<T, R>& operator[](int i) const noexcept {
+		assert(i >= 0 && i < C);
 		return data_[i];
 	}
 
 	/// Returns a reference to the i:th column vector.
-	/// If i is not smaller than C assertion error will occur.
-	vec<T, R>& operator[](std::size_t i) noexcept {
-		assert(i < C);
+	/// If i is not in the range [0, C) and assertion failure will occur.
+	vec<T, R>& operator[](int i) noexcept {
+		assert(i >= 0 && i < C);
 		return data_[i];
 	}
 
@@ -152,12 +152,12 @@ public:
 	}
 
 	/// Returns the product of matrices
-	template<std::size_t N>
+	template<int N>
 	mat<T, N, R> operator*(const mat<T, N, C>& m) const {
 		mat<T, N, R> temp;
-		for (std::size_t i = 0; i < N; ++i) {
-			for (std::size_t r = 0; r < R; ++r) {
-				for (std::size_t c = 0; c < C; ++c) {
+		for (int i = 0; i < N; ++i) {
+			for (int r = 0; r < R; ++r) {
+				for (int c = 0; c < C; ++c) {
 					temp[i][r] += data_[c][r] * m[i][c];
 				}
 			}
@@ -169,8 +169,8 @@ public:
 	/// Note: you can't multiply 4x4-matrix and 3-vector. Use transform instead.
 	vec<T, R> operator*(const vec<T, C>& v) const {
 		vec<T, R> temp;
-		for (std::size_t r = 0; r < R; ++r) {
-			for (std::size_t c = 0; c < C; ++c) {
+		for (int r = 0; r < R; ++r) {
+			for (int c = 0; c < C; ++c) {
 				temp[r] += data_[c][r] * v[c];
 			}
 		}
@@ -186,7 +186,7 @@ public:
 
 	/// Component-wise sum
 	mat<T, C, R>& operator+=(const mat<T, C, R>& m) {
-		for (std::size_t i = 0; i < C; ++i) {
+		for (int i = 0; i < C; ++i) {
 			data_[i] += m.data_[i];
 		}
 		return *this;
@@ -194,7 +194,7 @@ public:
 
 	/// Component wise subtraction
 	mat<T, C, R>& operator-=(const mat<T, C, R>& m) {
-		for (std::size_t i = 0; i < C; ++i) {
+		for (int i = 0; i < C; ++i) {
 			data_[i] -= m.data_[i];
 		}
 		return *this;
@@ -202,7 +202,7 @@ public:
 
 	/// Same as M = M * a
 	mat<T, C, R>& operator*=(const T& a) {
-		for (std::size_t i = 0; i < C; ++i) {
+		for (int i = 0; i < C; ++i) {
 			data_[i] *= a;
 		}
 		return *this;
@@ -216,7 +216,7 @@ public:
 
 	/// Matrices are equal if all corresponding components are equal.
 	bool operator==(const mat<T, C, R>& m) const {
-		for (std::size_t i = 0; i < C; ++i) {
+		for (int i = 0; i < C; ++i) {
 			if (data_[i] != m.data_[i]) return false;
 		}
 		return true;
@@ -224,7 +224,7 @@ public:
 
 	/// Matrices are not equal if any of the corresponding components are not equal
 	bool operator!=(const mat<T, C, R>& m) const {
-		for (std::size_t i = 0; i < C; ++i) {
+		for (int i = 0; i < C; ++i) {
 			if (data_[i] != m.data_[i]) return true;
 		}
 		return false;
@@ -237,7 +237,7 @@ public:
 	/// Returns the number of columns in the matrix
 	/// (NOT the number of components)
 	/// This is the largest value that can be given to the [] -operator.
-	static std::size_t size() noexcept { return C; }
+	static int size() noexcept { return C; }
 
 	/// Iterator to the first column
 	vec<T, R>* begin() noexcept { return data_; }
@@ -255,10 +255,10 @@ private:
 
 
 /// Multiplies all components of the matrix with a scalar
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 mat<T, C, R> operator*(const T& a, const mat<T, C, R>& m) {
 	mat<T, C, R> temp;
-	for (std::size_t i = 0; i < C; ++i) {
+	for (int i = 0; i < C; ++i) {
 		temp[i] = a * m[i];
 	}
 	return temp;
@@ -266,10 +266,10 @@ mat<T, C, R> operator*(const T& a, const mat<T, C, R>& m) {
 
 
 /// Prints the matrix to a stream inside brackets columns separated by a comma.
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 std::ostream& operator<<(std::ostream& os, const mat<T, C, R>& m) {
 	os << '(';
-	for (std::size_t i = 0; i < C; ++i) {
+	for (int i = 0; i < C; ++i) {
 		if (i > 0) os << ',';
 		os << m[i];
 	}
@@ -280,11 +280,11 @@ std::ostream& operator<<(std::ostream& os, const mat<T, C, R>& m) {
 
 /// Read matrix from a stream.
 /// The matrix must be inside brackets columns separeted by a comma.
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 std::istream& operator>>(std::istream& is, mat<T, C, R>& m) {
 	char tmp;
 	is >> tmp;
-	for (std::size_t i = 0; i < C; ++i) {
+	for (int i = 0; i < C; ++i) {
 		is >> m[i];
 		is >> tmp;
 	}
@@ -293,7 +293,7 @@ std::istream& operator>>(std::istream& is, mat<T, C, R>& m) {
 
 
 /// Converts a mat to std::string.
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 std::string to_string(const mat<T, C, R>& m) {
 	std::stringstream ss{};
 	ss << m;
@@ -302,11 +302,11 @@ std::string to_string(const mat<T, C, R>& m) {
 
 
 /// Returns the transpose of the matrix.
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 mat<T, R, C> transpose(const mat<T, C, R>& m) {
 	mat<T, R, C> temp;
-	for (std::size_t i = 0; i < C; ++i) { // C
-		for (std::size_t j = 0; j < R; ++j) {  // R
+	for (int i = 0; i < C; ++i) { // C
+		for (int j = 0; j < R; ++j) {  // R
 			temp[j][i] = m[i][j];
 		}
 	}
@@ -315,10 +315,10 @@ mat<T, R, C> transpose(const mat<T, C, R>& m) {
 
 
 /// Component wise multiplication of matrices
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 mat<T, C, R> matrixCompMult(const mat<T, C, R>& m1, const mat<T, C, R>& m2) {
 	mat<T, C, R> temp;
-	for (std::size_t i = 0; i < C; ++i) {
+	for (int i = 0; i < C; ++i) {
 		temp[i] = m1[i] * m2[i];
 	}
 	return temp;
@@ -326,11 +326,11 @@ mat<T, C, R> matrixCompMult(const mat<T, C, R>& m1, const mat<T, C, R>& m2) {
 
 
 /// Treats the first vector as matrix with one column and second as matrix with one row
-template <typename T, std::size_t C, std::size_t R>
+template <typename T, int C, int R>
 mat<T, C, R> outerProduct(const vec<T, R>& v1, const vec<T, C>& v2) {
 	mat<T, C, R> temp;
-	for (std::size_t i = 0; i < C; ++i) {
-		for (std::size_t j = 0; j < R; ++j) {
+	for (int i = 0; i < C; ++i) {
+		for (int j = 0; j < R; ++j) {
 			temp[i][j] = v1[j] * v2[i];
 		}
 	}
@@ -339,14 +339,14 @@ mat<T, C, R> outerProduct(const vec<T, R>& v1, const vec<T, C>& v2) {
 
 
 /// Computes the determinant of a matrix
-template <typename T, std::size_t N>
+template <typename T, int N>
 T determinant(const mat<T, N, N>& m) {
 	T det = 0;
-	for (std::size_t i = 0; i < N; ++i) {
+	for (int i = 0; i < N; ++i) {
 		if (i % 2 == 0)
-			det += m[i][0] * determinant(mat<T, N-1, N-1>{m, i, std::size_t{0}});
+			det += m[i][0] * determinant(mat<T, N-1, N-1>{m, i, int{0}});
 		else
-			det -= m[i][0] * determinant(mat<T, N-1, N-1>{m, i, std::size_t{0}});
+			det -= m[i][0] * determinant(mat<T, N-1, N-1>{m, i, int{0}});
 	}
 	return det;
 }
@@ -367,12 +367,12 @@ T determinant(const mat<T, 2, 2>& m) {
 
 
 /// Computes the inverse of a matrix
-template <typename T, std::size_t N>
+template <typename T, int N>
 mat<T, N, N> inverse(const mat<T, N, N>& m) {
 	mat<T, N, N> temp;
 	const T a = determinant(m);
-	for (std::size_t i = 0; i < N; ++i) {
-		for (std::size_t j = 0; j < N; ++j) {
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < N; ++j) {
 			if ((i + j) % 2 == 0)
 				temp[j][i] = determinant(mat<T, N-1, N-1>{m, i, j}) / a;
 			else
@@ -392,10 +392,10 @@ mat<T, 1, 1> inverse(const mat<T, 1, 1>& m) {
 
 /// Generates a translation matrix so that transform(translate(v), p) = p + v
 /// This the same matrix that would generated by glTranslate
-template <typename T, std::size_t N>
+template <typename T, int N>
 mat<T, N+1, N+1> translate(const vec<T, N>& v) {
 	mat<T, N+1, N+1> result{T{1}};
-	for (std::size_t i = 0; i < N; ++i) {
+	for (int i = 0; i < N; ++i) {
 		result[N][i] = v[i];
 	}
 	return result;
@@ -404,10 +404,10 @@ mat<T, N+1, N+1> translate(const vec<T, N>& v) {
 
 /// Generates a scaling matrix so that transform(scale(v), p) = v * p
 /// This the same matrix that would generated by glScale
-template <typename T, std::size_t N>
+template <typename T, int N>
 mat<T, N+1, N+1> scale(const vec<T, N>& v) {
 	mat<T, N+1, N+1> result{T{1}};
-	for (std::size_t i = 0; i < N; ++i) {
+	for (int i = 0; i < N; ++i) {
 		result[i][i] = v[i];
 	}
 	return result;
@@ -705,11 +705,11 @@ vec<T, 3> unProject(
 
 
 /// Multiply 4x4 matrix by 3-vector by adding 1 as last component to the vector.
-template <typename T, std::size_t N>
+template <typename T, int N>
 vec<T, N-1> transform(const mat<T, N, N>& m, const vec<T, N-1>& v) {
 	vec<T, N-1> temp{m[N-1]};
-	for (std::size_t c = 0; c < N-1; ++c) {
-		for (std::size_t r = 0; r < N-1; ++r) {
+	for (int c = 0; c < N-1; ++c) {
+		for (int r = 0; r < N-1; ++r) {
 			temp[r] += m[c][r] * v[c];
 		}
 	}
@@ -718,10 +718,10 @@ vec<T, N-1> transform(const mat<T, N, N>& m, const vec<T, N-1>& v) {
 
 
 /// Static cast each component from T2 to T1.
-template <typename T1, typename T2, std::size_t C, std::size_t R>
+template <typename T1, typename T2, int C, int R>
 mat<T1, C, R> static_mat_cast(const mat<T2, C, R>& m) {
 	mat<T1, C, R> temp;
-	for (std::size_t i = 0; i < C; ++i)
+	for (int i = 0; i < C; ++i)
 		temp[i] = static_vec_cast<T1>(m[i]);
 	return temp;
 }
@@ -729,10 +729,10 @@ mat<T1, C, R> static_mat_cast(const mat<T2, C, R>& m) {
 
 
 /// Returns the trace of a matrix (sum of the diagonal elements).
-template <typename T, std::size_t N>
+template <typename T, int N>
 T trace(const mat<T, N, N>& m) {
 	T temp = m[0][0];
-	for (std::size_t i = 1u; i < N; ++i) {
+	for (int i = 1; i < N; ++i) {
 		temp += m[i][i];
 	}
 	return temp;

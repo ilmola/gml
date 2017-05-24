@@ -15,10 +15,10 @@
 
 using namespace gml;
 
-template <typename T, std::size_t N>
+template <typename T, int N>
 using array_t = T[N];
 
-template <typename T, std::size_t N1, std::size_t N2>
+template <typename T, int N1, int N2>
 using array2_t = T[N1][N2];
 
 
@@ -27,9 +27,9 @@ using array2_t = T[N1][N2];
 // Use macro SC to create one
 class SourceContext {
 public:
-	SourceContext(const char* file, std::size_t line) : file(file), line(line) { }
+	SourceContext(const char* file, int line) : file(file), line(line) { }
 	const char* file;
-	const std::size_t line;
+	const int line;
 };
 
 #define SC SourceContext(__FILE__, __LINE__)
@@ -61,21 +61,21 @@ inline void EQ(const SourceContext& sc, double a, double b) {
 }
 
 
-template <std::size_t N>
+template <int N>
 void EQ(const SourceContext& sc, const gml::vec<unsigned, N>& a, const gml::vec<unsigned, N>& b) {
 	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
 }
 
 
-template <std::size_t N>
+template <int N>
 void EQ(const SourceContext& sc, const gml::vec<int, N>& a, const gml::vec<int, N>& b) {
 	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
 }
 
 
-template <std::size_t N>
+template <int N>
 void EQ(const SourceContext& sc, const gml::vec<double, N>& a, const gml::vec<double, N>& b) {
-	for (std::size_t i = 0; i < N; ++i) {
+	for (int i = 0; i < N; ++i) {
 		if (!fcmp(a[i], b[i])) {
 			std::cout << sc << ": " << a << " != " << b << "\n";
 			return;
@@ -84,16 +84,16 @@ void EQ(const SourceContext& sc, const gml::vec<double, N>& a, const gml::vec<do
 }
 
 
-template <std::size_t C, std::size_t R>
+template <int C, int R>
 void EQ(const SourceContext& sc, const gml::mat<int, C, R>& a, const gml::mat<int, C, R>& b) {
 	if (a != b) { std::cout << sc << ": " << a << " != " << b << "\n"; }
 }
 
 
-template <std::size_t C, std::size_t R>
+template <int C, int R>
 void EQ(const SourceContext& sc, const gml::mat<double, C, R>& a, const gml::mat<double, C, R>& b) {
-	for (std::size_t c = 0; c < C; ++c) {
-		for (std::size_t r = 0; r < R; ++r) {
+	for (int c = 0; c < C; ++c) {
+		for (int r = 0; r < R; ++r) {
 			if (!fcmp(a[c][r], b[c][r])) {
 				std::cout << sc << ": " << a << " != " << b << "\n";
 				return;
@@ -128,7 +128,7 @@ inline double rand(double min, double max) {
 }
 
 
-template <std::size_t N>
+template <int N>
 vec<double, N> randVec(double min, double max) {
 	vec<double, N> result{};
 	for (auto& value : result) {
@@ -138,7 +138,7 @@ vec<double, N> randVec(double min, double max) {
 }
 
 
-template <std::size_t C, std::size_t R>
+template <int C, int R>
 mat<double, C, R> randMat(double min, double max) {
 	mat<double, C, R> result{};
 	for (auto& value : result) {
@@ -157,7 +157,7 @@ inline dquat randQ(double min, double max) {
 
 int main() {
 
-	const std::size_t testRuns = 1000;
+	const int testRuns = 1000;
 	const int min = -20;
 	const int max = 20;
 
@@ -174,7 +174,7 @@ int main() {
 	const dquat iq(1);
 
 
-	for (std::size_t i=0; i<testRuns; i++) {
+	for (int i=0; i<testRuns; i++) {
 
 		//-Test data-----------------------------------------------------------
 		const double t = rand(0.0, 1.0);
@@ -211,7 +211,7 @@ int main() {
 		EQ(SC, dvec3{v1[0], v1[1], v1[2]}, v1);
 		EQ(SC, dvec3{dvec2{v1}, v1[2]}, v1);
 		EQ(SC, dvec3{v1}, v1);
-		EQ(SC, dvec2{v1}, dvec2{v1, std::size_t{2}});
+		EQ(SC, dvec2{v1}, dvec2{v1, int{2}});
 
 		// Cast
 		EQ(SC,
@@ -221,7 +221,7 @@ int main() {
 		EQ(SC, static_vec_cast<double>(v1), v1);
 
 		// Iteration
-		std::size_t index = 0;
+		int index = 0;
 		for (auto value : v1) {
 			EQ(SC, value, v1[index]);
 			++index;
@@ -313,7 +313,7 @@ int main() {
 		EQ(SC, dmat4{M1}, M1);
 		EQ(SC, dmat4{M1[0], M1[1], M1[2], M1[3]}, M1);
 		EQ(SC, dmat3{v1}, dmat3{v1, v1, v1});
-		EQ(SC, dmat3{M1}, dmat3{M1, std::size_t{3}, std::size_t{3}});
+		EQ(SC, dmat3{M1}, dmat3{M1, int{3}, int{3}});
 		EQ(SC, dmat4{dmat3{I}, 1.0}, I);
 		EQ(SC, dmat2{dmat4x2{dmat2x4{M1}}}, dmat2{M1});
 
@@ -330,7 +330,7 @@ int main() {
 		);
 
 		// Iteration
-		std::size_t cIndex = 0;
+		int cIndex = 0;
 		for (const auto& column : M1) {
 			EQ(SC, column, M1[cIndex]);
 			++cIndex;
