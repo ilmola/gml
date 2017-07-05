@@ -12,6 +12,7 @@
 #include <cmath>
 #include <sstream>
 #include <string>
+#include <tuple>
 
 #include "vec.hpp"
 #include "quaternion.hpp"
@@ -338,15 +339,49 @@ mat<T, C, R> outerProduct(const vec<T, R>& v1, const vec<T, C>& v2) {
 }
 
 
+/// Calculates the first minor (determinant of a submatrix)
+/// @param col Index of the column to remove (must be [0, N - 1])
+/// @param row Index of the row to remove (must be [0, N - 1])
+template <typename T, int N>
+T firstMinor(const mat<T, N, N>& m, int col, int row) {
+	static_assert(N > 1, "N must be greater than 1.");
+
+	return determinant(mat<T, N-1, N-1>{m, col, row});
+}
+
+
+template <typename T>
+T firstMinor(const mat<T, 3, 3>& m, int col, int row) {
+	assert(col >= 0 && col < 3);
+	assert(row >= 0 && row < 3);
+
+	const int c0 = (col == 0 ? 1 : 0);
+	const int c1 = (col == 2 ? 1 : 2);
+	const int r0 = (row == 0 ? 1 : 0);
+	const int r1 = (row == 2 ? 1 : 2);
+
+	return m[c0][r0] * m[c1][r1] - m[c1][r0] * m[c0][r1];
+}
+
+
+template <typename T>
+T firstMinor(const mat<T, 2, 2>& m, int col, int row) {
+	assert(col >= 0 && col < 2);
+	assert(row >= 0 && row < 2);
+
+	return m[!col][!row];
+}
+
+
 /// Computes the determinant of a matrix
 template <typename T, int N>
 T determinant(const mat<T, N, N>& m) {
 	T det = 0;
 	for (int i = 0; i < N; ++i) {
 		if (i % 2 == 0)
-			det += m[i][0] * determinant(mat<T, N-1, N-1>{m, i, int{0}});
+			det += m[i][0] * firstMinor(m, i, 0);
 		else
-			det -= m[i][0] * determinant(mat<T, N-1, N-1>{m, i, int{0}});
+			det -= m[i][0] * firstMinor(m, i, 0);
 	}
 	return det;
 }
@@ -374,9 +409,9 @@ mat<T, N, N> inverse(const mat<T, N, N>& m) {
 	for (int i = 0; i < N; ++i) {
 		for (int j = 0; j < N; ++j) {
 			if ((i + j) % 2 == 0)
-				temp[j][i] = determinant(mat<T, N-1, N-1>{m, i, j}) / a;
+				temp[j][i] = firstMinor(m, i, j) / a;
 			else
-				temp[j][i] = -determinant(mat<T, N-1, N-1>{m, i, j}) / a;
+				temp[j][i] = -firstMinor(m, i, j) / a;
 		}
 	}
 	return temp;
@@ -505,10 +540,46 @@ mat<T, 4, 4> rotate(const quaternion<T>& q) {
 }
 
 
-/// Generates a rotation quaternion from a rotation matrix.
+/// Generates a TRS matrix. Same as translate(translation) *
+/// rotate(angle, axis) * scale(scaling), but potentially faster.
+template <typename T>
+mat<T, 4, 4> translateRotateScale(
+	const vec<T, 3>& translation,
+	T angle, const vec<T, 3>& axis,
+	const gml::vec<T, 3>& scaling
+) {
+	return translateRotateScale(
+		translation, qrotate(angle, axis), scaling
+	);
+}
+
+
+/// Generates a TRS matrix. Same as translate(translation) *
+/// rotate(rotation) * scale(scaling), but potentially faster.
+template <typename T>
+mat<T, 4, 4> translateRotateScale(
+	const vec<T, 3>& translation,
+	const quaternion<T>& rotation,
+	const vec<T, 3>& scaling
+) {
+	mat<T, 4, 4> m = rotate(rotation);
+
+	m[0] *= scaling[0];
+	m[1] *= scaling[1];
+	m[2] *= scaling[2];
+
+	m[3][0] = translation[0];
+	m[3][1] = translation[1];
+	m[3][2] = translation[2];
+
+	return m;
+}
+
+
+/// Decomposes a rotation matrix to a rotation quaternion.
 /// The input matrix is assumed to be a valid rotation matrix.
 template <typename T>
-quaternion<T> qrotate(const mat<T, 4, 4>& m) {
+quaternion<T> qdecomposeRotate(const mat<T, 4, 4>& m) {
 	using std::sqrt;
 
 	const T t = trace(m);
@@ -522,7 +593,53 @@ quaternion<T> qrotate(const mat<T, 4, 4>& m) {
 			S * (m[0][1] - m[1][0])
 		}
 	};
+}
 
+
+/// Decomposes a rotation matrix to an angle and a axis.
+/// The input matrix is assumed to be a valid rotation matrix.
+template <typename T>
+std::tuple<T, vec<T, 3>> decomposeRotate(const mat<T, 4, 4>& m) {
+	return decomposeRotate(qdecomposeRotate(m));
+}
+
+
+/// Decomposes translate, rotate, scale -matrix to translation, angle, axis and scale.
+template <typename T>
+std::tuple<vec<T, 3>, T, vec<T, 3>, vec<T, 3>> decomposeTrs(
+	const gml::mat<T, 4, 4>& m
+) {
+	std::tuple<vec<T, 3>, T, vec<T, 3>, vec<T, 3>> temp{};
+
+	quaternion<T> q{};
+	std::tie(std::get<0>(temp), q, std::get<3>(temp)) = qdecomposeTrs(m);
+
+	std::tie(std::get<1>(temp), std::get<2>(temp)) = decomposeRotate(q);
+
+	return temp;
+}
+
+
+/// Decomposes translate, rotate, scale -matrix to translation, rotation quaternion and scale.
+template <typename T>
+std::tuple<vec<T, 3>, quaternion<T>, vec<T, 3>> qdecomposeTrs(
+	const gml::mat<T, 4, 4>& m
+) {
+	gml::mat<T, 4, 4> temp = m;
+
+	const T s = firstMinor(m, 3, 3) < 0 ? static_cast<T>(-1) : static_cast<T>(1);
+
+	vec<T, 3> scaling{s * length(m[0]), length(m[1]), length(m[2])};
+
+	temp[0] /= scaling[0];
+	temp[1] /= scaling[1];
+	temp[2] /= scaling[2];
+
+	return std::make_tuple(
+		vec<T, 3>{m[3]},
+		qdecomposeRotate(temp),
+		scaling
+	);
 }
 
 

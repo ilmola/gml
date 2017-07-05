@@ -11,6 +11,7 @@
 #include <cmath>
 #include <sstream>
 #include <string>
+#include <tuple>
 
 #include "vec.hpp"
 
@@ -294,6 +295,24 @@ quaternion<T> qrotate(const vec<T, 3>& angle) {
 			-cz * sx * sy + cx * cy * sz
 		}
 	};
+}
+
+
+/// Decomposes a rotation quaternion to angle and axis.
+template <typename T>
+std::tuple<T, vec<T, 3>> decomposeRotate(const quaternion<T>& q) {
+	using std::acos;
+	using std::sqrt;
+	using std::max;
+
+	const T zero = static_cast<T>(0);
+	const T one = static_cast<T>(1);
+	const T two = static_cast<T>(2);
+
+	return std::make_tuple(
+		two * acos(clamp(q.real, -one, one)),
+		q.imag / sqrt(max(zero, one - q.real * q.real))
+	);
 }
 
 

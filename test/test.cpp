@@ -157,7 +157,7 @@ inline dquat randQ(double min, double max) {
 
 int main() {
 
-	const int testRuns = 1000;
+	const int testRuns = 10000;
 	const int min = -20;
 	const int max = 20;
 
@@ -368,7 +368,7 @@ int main() {
 		EQ(SC, determinant(M1), determinant(transpose(M1)));
 		EQ(SC, determinant(M1 * M2), determinant(M1) * determinant(M2));
 		EQ(SC, inverse(I), I);
-		//if (determinant(M1) != 0.0) EQ(SC, inverse(inverse(M1)), M1 );
+		if (determinant(M1) != 0.0) EQ(SC, inverse(inverse(M1)), M1);
 		EQ(SC, outerProduct(v1, v2), mat<double, 1, 3>{v1} * transpose(mat<double, 1, 3>{v2}));
 		EQ(SC, matrixCompMult(M1, M2), dmat4{M1[0] * M2[0], M1[1] * M2[1], M1[2] * M2[2], M1[3] * M2[3]});
 		EQ(SC, trace(M1), M1[0][0] + M1[1][1] + M1[2][2] + M1[3][3]);
@@ -392,6 +392,35 @@ int main() {
 		EQ(SC, rotate(dvec3{scalar, zero, zero}), rotate(scalar, dvec3{one, zero, zero}));
 		EQ(SC, ortho(-one, one, -one, one, one, -one), I);
 		EQ(SC, lookAt(zeros, dvec3{zero, zero, -one}, dvec3{zero, one, zero}), I);
+		EQ(SC, translateRotateScale(zeros, zero, dvec3{1.0, 0.0, 0.0}, ones), I);
+		{
+			const auto trs = translateRotateScale(v1, scalar, normalize(v2), v3);
+			EQ(SC, trs, translate(v1) * rotate(scalar, normalize(v2)) * scale(v3));
+
+			const auto temp = decomposeTrs(trs);
+			EQ(SC,
+				trs,
+				translateRotateScale(
+					std::get<0>(temp),
+					std::get<1>(temp), std::get<2>(temp),
+					std::get<3>(temp)
+				)
+			);
+		}
+		{
+			const auto rq = qrotate(scalar, normalize(v2));
+
+			const auto trs = translateRotateScale(v1, rq, v3);
+			EQ(SC, trs, translate(v1) * rotate(rq) * scale(v3));
+
+			const auto temp = qdecomposeTrs(trs);
+			EQ(SC,
+				trs,
+				translateRotateScale(
+					std::get<0>(temp), std::get<1>(temp), std::get<2>(temp)
+				)
+			);
+		}
 
 		const auto tempProj = perspective(one, one, one, 2.0);
 		EQ(SC, project(dvec3{zero, zero, -one}, I, tempProj, ivec2{-1, -1}, ivec2{2, 2}), zeros);
@@ -463,10 +492,15 @@ int main() {
 		EQ(SC, qrotate(dvec3{zero, zero, scalar}), qrotate(scalar, dvec3{zero, zero, one}));
 		EQ(SC, rotate(iq), I);
 		EQ(SC, rotate(qrotate(v1)), rotate(v1));
-		EQ(SC, rotate(qrotate(rotate(qrotate(v1)))), rotate(v1));
+		EQ(SC, rotate(qdecomposeRotate(rotate(qrotate(v1)))), rotate(v1));
 		EQ(SC, transform(qrotate(zeros), v1), v1);
 		EQ(SC, transform(qrotate(dvec3{radians(180.0), zero, zero}), v1), dvec3{v1[0], -v1[1], -v1[2]});
 		EQ(SC, transform(normalize(q1), v1), (normalize(q1) * v1 * conj(normalize(q1))).imag);
+		EQ(SC, abs(qrotate(scalar, normalize(v1))), 1.0);
+		{
+			auto temp = decomposeRotate(qrotate(scalar, normalize(v1)));
+			EQ(SC, qrotate(std::get<0>(temp), std::get<1>(temp)), qrotate(scalar, normalize(v1)));
+		}
 
 
 		//-Splines--------------------------------------------------------------
