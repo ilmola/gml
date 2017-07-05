@@ -47,7 +47,7 @@ gml::vec<TF, N> texelCenter(const gml::vec<TI, N>& index, const gml::vec<TS, N>&
 	gml::vec<TF, N> temp;
 	for (int i = 0; i < N; ++i) {
 		temp[i] = texelCenter<TF>(index[i], size[i]);
-	};
+	}
 	return temp;
 }
 
@@ -56,7 +56,7 @@ gml::vec<TF, N> texelCenter(const gml::vec<TI, N>& index, const gml::vec<TS, N>&
 /// in a 1D texture with given size.
 /// The return value is in the range [0, size - 1] if input is in range [0, 1[.
 /// @tparam TI Type of the index. Must be an integral type.
-/// @tparam TF Type of the coordinate to return. Must be a floating point type.
+/// @tparam TF Type of the coordinate. Must be a floating point type.
 /// @tparam TS Type of the size. Must be an integral type.
 /// @param coord The texture coordinate.
 /// @param size Size of the texture in texels.
@@ -68,7 +68,7 @@ TI nearestTexel(TF coord, TS size)
 	static_assert(std::is_floating_point<TF>::value, "TF must a floating point type.");
 
 	const TF temp = coord * static_cast<TF>(size);
-	return static_cast<TI>(temp) - static_cast<TI>(temp < static_cast<TI>(0));
+	return static_cast<TI>(temp) - static_cast<TI>(temp < static_cast<TF>(0));
 }
 
 
@@ -76,7 +76,7 @@ TI nearestTexel(TF coord, TS size)
 /// in a N-D texture with given size.
 /// The return value is in the range [0, size - 1] if input is in range [0, 1[.
 /// @tparam TI Type of the index. Must be an integral type.
-/// @tparam TF Type of the coordinate to return. Must be a floating point type.
+/// @tparam TF Type of the coordinate. Must be a floating point type.
 /// @tparam TS Type of the size. Must be an integral type.
 /// @param coord The texture coordinate.
 /// @param size Size of the texture in texels.
