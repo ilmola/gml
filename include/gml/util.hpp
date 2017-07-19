@@ -7,6 +7,7 @@
 #define UUID_BD878441A4634595B03E6859030E9A7D
 
 #include <algorithm>
+#include <cmath>
 
 
 namespace gml {
