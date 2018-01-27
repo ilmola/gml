@@ -484,6 +484,7 @@ int main() {
 		EQ(SC, inverse(iq), iq);
 		EQ(SC, inverse(inverse(q1)), q1);
 		EQ(SC, abs(iq), one);
+		EQ(SC, norm(iq), one);
 
 		// Transformation
 		EQ(SC, qrotate(zeros), iq);

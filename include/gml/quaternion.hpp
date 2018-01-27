@@ -234,11 +234,18 @@ std::string to_string(const quaternion<T>& q) {
 }
 
 
-/// Absolute value.
+/// Returns the squared magnitude of the quaternion q
+template <typename T>
+T norm(const quaternion<T>& q) {
+	return q.real * q.real + dot(q.imag, q.imag);
+}
+
+
+/// Returns the magnitude of the quaternion q.
 template <typename T>
 T abs(const quaternion<T>& q) {
 	using std::sqrt;
-	return sqrt(q.real * q.real + dot(q.imag, q.imag));
+	return sqrt(norm(q));
 }
 
 
@@ -336,7 +343,7 @@ vec<T, 3> transform(const quaternion<T>& q, const vec<T, 3>& v) {
 /// Inverse of quaternion.
 template <typename T>
 quaternion<T> inverse(const quaternion<T>& q) {
-	return conj(q) / (q.real*q.real + dot(q.imag, q.imag));
+	return conj(q) / norm(q);
 }
 
 
