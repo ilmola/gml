@@ -26,6 +26,12 @@ namespace gml {
  */
 template <typename T, int N>
 class vec {
+private:
+  template<typename First, typename... Args>
+  struct _first_arg { using type = First; };
+  template<typename... Args>
+  using _first_t = typename _first_arg<Args...>::type;
+
 public:
 
 	static_assert(N > 0, "N must be greater than zero!");
@@ -52,7 +58,7 @@ public:
 	/// Initializes components from N values directly.
 	template <
 		typename... Args,
-		typename std::enable_if<N == sizeof...(Args), int>::type = 0
+		typename std::enable_if<N == sizeof...(Args) && std::is_convertible<_first_t<Args...>, T>::value, int>::type = 0
 	>
 	vec(const Args&... args) :
 		data_{ args... }
