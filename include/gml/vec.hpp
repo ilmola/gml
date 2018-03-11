@@ -26,6 +26,15 @@ namespace gml {
  */
 template <typename T, int N>
 class vec {
+private:
+  template<typename...>
+  struct _all_convertible : std::true_type {};
+  template<typename U, typename First, typename... Args>
+  struct _all_convertible<U, First, Args...> {
+    static constexpr bool value = std::is_convertible<First, U>::value &&
+      _all_convertible<U, Args...>::value;
+  };
+
 public:
 
 	static_assert(N > 0, "N must be greater than zero!");
@@ -52,7 +61,7 @@ public:
 	/// Initializes components from N values directly.
 	template <
 		typename... Args,
-		typename std::enable_if<N == sizeof...(Args), int>::type = 0
+		typename std::enable_if<N == sizeof...(Args) && _all_convertible<T, Args...>::value, int>::type = 0
 	>
 	vec(const Args&... args) :
 		data_{ args... }
