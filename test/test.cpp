@@ -494,6 +494,17 @@ int main() {
 		EQ(SC, rotate(iq), I);
 		EQ(SC, rotate(qrotate(v1)), rotate(v1));
 		EQ(SC, rotate(qdecomposeRotate(rotate(qrotate(v1)))), rotate(v1));
+
+		EQ(SC,
+			qdecomposeRotate(dmat4{
+				dvec4{-1.0, 0.0,  0.0, 0.0},
+				dvec4{ 0.0, 1.0,  0.0, 0.0},
+				dvec4{ 0.0, 0.0, -1.0, 0.0},
+				dvec4{ 0.0, 0.0,  0.0, 1.0}
+			}),
+			dquat{0.0, {0.0, 1.0, 0.0}}
+		);
+
 		EQ(SC, transform(qrotate(zeros), v1), v1);
 		EQ(SC, transform(qrotate(dvec3{radians(180.0), zero, zero}), v1), dvec3{v1[0], -v1[1], -v1[2]});
 		EQ(SC, transform(normalize(q1), v1), (normalize(q1) * v1 * conj(normalize(q1))).imag);

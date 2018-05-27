@@ -579,20 +579,63 @@ mat<T, 4, 4> translateRotateScale(
 /// Decomposes a rotation matrix to a rotation quaternion.
 /// The input matrix is assumed to be a valid rotation matrix.
 template <typename T>
-quaternion<T> qdecomposeRotate(const mat<T, 4, 4>& m) {
+quaternion<T> qdecomposeRotate(const mat<T, 4, 4>& m)
+{
 	using std::sqrt;
 
-	const T t = trace(m);
-	const T S = static_cast<T>(0.5) / sqrt(t);
+	const T one = static_cast<T>(1);
+	const T two = static_cast<T>(2);
 
-	return quaternion<T>{
-		static_cast<T>(0.25) / S,
-		vec<T, 3>{
-			S * (m[1][2] - m[2][1]),
-			S * (m[2][0] - m[0][2]),
-			S * (m[0][1] - m[1][0])
-		}
-	};
+	const T trace = m[0][0] + m[1][1] + m[2][2];
+
+	if (trace > static_cast<T>(0)) {
+		const T s = static_cast<T>(0.5) / sqrt(trace + one);
+
+		return quaternion<T>{
+			static_cast<T>(0.25) / s,
+			vec<T, 3>{
+				(m[1][2] - m[2][1]) * s,
+				(m[2][0] - m[0][2]) * s,
+				(m[0][1] - m[1][0]) * s
+			}
+		};
+	}
+	else if (m[0][0] > m[1][1] && m[0][0] > m[2][2]) {
+		const T s = two * sqrt(one + m[0][0] - m[1][1] - m[2][2]);
+
+		return quaternion<T>{
+			(m[1][2] - m[2][1]) / s,
+			vec<T, 3>{
+				static_cast<T>(0.25) * s,
+				(m[1][0] + m[0][1]) / s,
+				(m[2][0] + m[0][2]) / s
+			}
+		};
+	}
+	else if (m[1][1] > m[2][2]) {
+		const T s = two * sqrt(one + m[1][1] - m[0][0] - m[2][2]);
+
+		return quaternion<T>{
+			(m[2][0] - m[0][2]) / s,
+			vec<T, 3>{
+				(m[1][0] + m[0][1]) / s,
+				static_cast<T>(0.25) * s,
+				(m[2][1] + m[1][2]) / s
+			}
+		};
+	}
+	else {
+		const T s = two * sqrt(one + m[2][2] - m[0][0] - m[1][1]);
+
+		return quaternion<T>{
+			(m[0][1] - m[1][0]) / s,
+			vec<T, 3>{
+				(m[2][0] + m[0][2]) / s,
+				(m[2][1] + m[1][2]) / s,
+				static_cast<T>(0.25) * s
+			}
+		};
+	}
 }
 
 
