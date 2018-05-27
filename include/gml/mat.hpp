@@ -899,6 +899,15 @@ T trace(const mat<T, N, N>& m) {
 }
 
 
+/// Returns the transpose of the inverse of the upper leftmost 3x3 of the matrix
+template <typename T>
+mat<T, 3, 3> normalMatrix(const mat<T, 4, 4>& m)
+{
+	return transpose(inverse(mat<T, 3, 3>{m}));
+}
+
+
+
 typedef mat<float, 2, 2> mat2x2;
 typedef mat<float, 2, 3> mat2x3;
 typedef mat<float, 2, 4> mat2x4;

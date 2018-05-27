@@ -393,6 +393,7 @@ int main() {
 		EQ(SC, ortho(-one, one, -one, one, one, -one), I);
 		EQ(SC, lookAt(zeros, dvec3{zero, zero, -one}, dvec3{zero, one, zero}), I);
 		EQ(SC, translateRotateScale(zeros, zero, dvec3{1.0, 0.0, 0.0}, ones), I);
+		EQ(SC, normalMatrix(rotate(v1)), dmat3{rotate(v1)});
 		{
 			const auto trs = translateRotateScale(v1, scalar, normalize(v2), v3);
 			EQ(SC, trs, translate(v1) * rotate(scalar, normalize(v2)) * scale(v3));
