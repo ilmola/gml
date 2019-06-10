@@ -354,15 +354,15 @@ quaternion<T1> static_quaternion_cast(const quaternion<T2>& q) {
 }
 
 
-typedef quaternion<float> quat;
+using quat = quaternion<float>;
 
-typedef quaternion<double> dquat;
+using dquat = quaternion<double>;
 
-typedef quaternion<int> iquat;
+using iquat = quaternion<int>;
 
-typedef quaternion<unsigned int> uquat;
+using uquat = quaternion<unsigned>;
 
-typedef quaternion<bool> bquat;
+using bquat = quaternion<bool>;
 
 }
 

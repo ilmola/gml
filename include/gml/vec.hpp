@@ -758,41 +758,41 @@ vec<TI, N> packSnorm(const vec<TF, N>& v) {
 
 
 
-typedef vec<float, 2> vec2;
-typedef vec<float, 3> vec3;
-typedef vec<float, 4> vec4;
+using vec2 = vec<float, 2>;
+using vec3 = vec<float, 3>;
+using vec4 = vec<float, 4>;
 
-typedef vec<double, 2> dvec2;
-typedef vec<double, 3> dvec3;
-typedef vec<double, 4> dvec4;
+using dvec2 = vec<double, 2>;
+using dvec3 = vec<double, 3>;
+using dvec4 = vec<double, 4>;
 
-typedef vec<int, 2> ivec2;
-typedef vec<int, 3> ivec3;
-typedef vec<int, 4> ivec4;
+using ivec2 = vec<int, 2>;
+using ivec3 = vec<int, 3>;
+using ivec4 = vec<int, 4>;
 
-typedef vec<unsigned int, 2> uvec2;
-typedef vec<unsigned int, 3> uvec3;
-typedef vec<unsigned int, 4> uvec4;
+using uvec2 = vec<unsigned, 2>;
+using uvec3 = vec<unsigned, 3>;
+using uvec4 = vec<unsigned, 4>;
 
-typedef vec<bool, 2> bvec2;
-typedef vec<bool, 3> bvec3;
-typedef vec<bool, 4> bvec4;
+using bvec2 = vec<bool, 2>;
+using bvec3 = vec<bool, 3>;
+using bvec4 = vec<bool, 4>;
 
-typedef vec<std::size_t, 2> zvec2;
-typedef vec<std::size_t, 3> zvec3;
-typedef vec<std::size_t, 4> zvec4;
+using zvec2 = vec<std::size_t, 2>;
+using zvec3 = vec<std::size_t, 3>;
+using zvec4 = vec<std::size_t, 4>;
 
-typedef vec<char, 2> cvec2;
-typedef vec<char, 3> cvec3;
-typedef vec<char, 4> cvec4;
+using cvec2 = vec<char, 2>;
+using cvec3 = vec<char, 3>;
+using cvec4 = vec<char, 4>;
 
-typedef vec<signed char, 2> scvec2;
-typedef vec<signed char, 3> scvec3;
-typedef vec<signed char, 4> scvec4;
+using scvec2 = vec<signed char, 2>;
+using scvec3 = vec<signed char, 3>;
+using scvec4 = vec<signed char, 4>;
 
-typedef vec<unsigned char, 2> ucvec2;
-typedef vec<unsigned char, 3> ucvec3;
-typedef vec<unsigned char, 4> ucvec4;
+using ucvec2 = vec<unsigned char, 2>;
+using ucvec3 = vec<unsigned char, 3>;
+using ucvec4 = vec<unsigned char, 4>;
 
 }
 

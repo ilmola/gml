@@ -908,75 +908,75 @@ mat<T, 3, 3> normalMatrix(const mat<T, 4, 4>& m)
 
 
 
-typedef mat<float, 2, 2> mat2x2;
-typedef mat<float, 2, 3> mat2x3;
-typedef mat<float, 2, 4> mat2x4;
-typedef mat<float, 3, 2> mat3x2;
-typedef mat<float, 3, 3> mat3x3;
-typedef mat<float, 3, 4> mat3x4;
-typedef mat<float, 4, 2> mat4x2;
-typedef mat<float, 4, 3> mat4x3;
-typedef mat<float, 4, 4> mat4x4;
+using mat2x2 = mat<float, 2, 2>;
+using mat2x3 = mat<float, 2, 3>;
+using mat2x4 = mat<float, 2, 4>;
+using mat3x2 = mat<float, 3, 2>;
+using mat3x3 = mat<float, 3, 3>;
+using mat3x4 = mat<float, 3, 4>;
+using mat4x2 = mat<float, 4, 2>;
+using mat4x3 = mat<float, 4, 3>;
+using mat4x4 = mat<float, 4, 4>;
 
-typedef mat<float, 2, 2> mat2;
-typedef mat<float, 3, 3> mat3;
-typedef mat<float, 4, 4> mat4;
+using mat2 = mat<float, 2, 2>;
+using mat3 = mat<float, 3, 3>;
+using mat4 = mat<float, 4, 4>;
 
-typedef mat<double, 2, 2> dmat2x2;
-typedef mat<double, 2, 3> dmat2x3;
-typedef mat<double, 2, 4> dmat2x4;
-typedef mat<double, 3, 2> dmat3x2;
-typedef mat<double, 3, 3> dmat3x3;
-typedef mat<double, 3, 4> dmat3x4;
-typedef mat<double, 4, 2> dmat4x2;
-typedef mat<double, 4, 3> dmat4x3;
-typedef mat<double, 4, 4> dmat4x4;
+using dmat2x2 = mat<double, 2, 2>;
+using dmat2x3 = mat<double, 2, 3>;
+using dmat2x4 = mat<double, 2, 4>;
+using dmat3x2 = mat<double, 3, 2>;
+using dmat3x3 = mat<double, 3, 3>;
+using dmat3x4 = mat<double, 3, 4>;
+using dmat4x2 = mat<double, 4, 2>;
+using dmat4x3 = mat<double, 4, 3>;
+using dmat4x4 = mat<double, 4, 4>;
 
-typedef mat<double, 2, 2> dmat2;
-typedef mat<double, 3, 3> dmat3;
-typedef mat<double, 4, 4> dmat4;
+using dmat2 = mat<double, 2, 2>;
+using dmat3 = mat<double, 3, 3>;
+using dmat4 = mat<double, 4, 4>;
 
-typedef mat<int, 2, 2> imat2x2;
-typedef mat<int, 2, 3> imat2x3;
-typedef mat<int, 2, 4> imat2x4;
-typedef mat<int, 3, 2> imat3x2;
-typedef mat<int, 3, 3> imat3x3;
-typedef mat<int, 3, 4> imat3x4;
-typedef mat<int, 4, 2> imat4x2;
-typedef mat<int, 4, 3> imat4x3;
-typedef mat<int, 4, 4> imat4x4;
+using imat2x2 = mat<int, 2, 2>;
+using imat2x3 = mat<int, 2, 3>;
+using imat2x4 = mat<int, 2, 4>;
+using imat3x2 = mat<int, 3, 2>;
+using imat3x3 = mat<int, 3, 3>;
+using imat3x4 = mat<int, 3, 4>;
+using imat4x2 = mat<int, 4, 2>;
+using imat4x3 = mat<int, 4, 3>;
+using imat4x4 = mat<int, 4, 4>;
 
-typedef mat<int, 2, 2> imat2;
-typedef mat<int, 3, 3> imat3;
-typedef mat<int, 4, 4> imat4;
+using imat2 = mat<int, 2, 2>;
+using imat3 = mat<int, 3, 3>;
+using imat4 = mat<int, 4, 4>;
 
-typedef mat<unsigned int, 2, 2> umat2x2;
-typedef mat<unsigned int, 2, 3> umat2x3;
-typedef mat<unsigned int, 2, 4> umat2x4;
-typedef mat<unsigned int, 3, 2> umat3x2;
-typedef mat<unsigned int, 3, 3> umat3x3;
-typedef mat<unsigned int, 3, 4> umat3x4;
-typedef mat<unsigned int, 4, 2> umat4x2;
-typedef mat<unsigned int, 4, 3> umat4x3;
-typedef mat<unsigned int, 4, 4> umat4x4;
+using umat2x2 = mat<unsigned, 2, 2>;
+using umat2x3 = mat<unsigned, 2, 3>;
+using umat2x4 = mat<unsigned, 2, 4>;
+using umat3x2 = mat<unsigned, 3, 2>;
+using umat3x3 = mat<unsigned, 3, 3>;
+using umat3x4 = mat<unsigned, 3, 4>;
+using umat4x2 = mat<unsigned, 4, 2>;
+using umat4x3 = mat<unsigned, 4, 3>;
+using umat4x4 = mat<unsigned, 4, 4>;
 
-typedef mat<unsigned int, 2, 2> umat2;
-typedef mat<unsigned int, 3, 3> umat3;
-typedef mat<unsigned int, 4, 4> umat4;
+using umat2 = mat<unsigned, 2, 2>;
+using umat3 = mat<unsigned, 3, 3>;
+using umat4 = mat<unsigned, 4, 4>;
 
-typedef mat<bool, 2, 2> bmat2x2;
-typedef mat<bool, 2, 3> bmat2x3;
-typedef mat<bool, 2, 4> bmat2x4;
-typedef mat<bool, 3, 2> bmat3x2;
-typedef mat<bool, 3, 3> bmat3x3;
-typedef mat<bool, 3, 4> bmat3x4;
-typedef mat<bool, 4, 2> bmat4x2;
-typedef mat<bool, 4, 3> bmat4x3;
-typedef mat<bool, 4, 4> bmat4x4;
+using bmat2x2 = mat<bool, 2, 2>;
+using bmat2x3 = mat<bool, 2, 3>;
+using bmat2x4 = mat<bool, 2, 4>;
+using bmat3x2 = mat<bool, 3, 2>;
+using bmat3x3 = mat<bool, 3, 3>;
+using bmat3x4 = mat<bool, 3, 4>;
+using bmat4x2 = mat<bool, 4, 2>;
+using bmat4x3 = mat<bool, 4, 3>;
+using bmat4x4 = mat<bool, 4, 4>;
 
-typedef mat<bool, 2, 2> bmat2;
-typedef mat<bool, 3, 3> bmat3;
-typedef mat<bool, 4, 4> bmat4;
+using bmat2 = mat<bool, 2, 2>;
+using bmat3 = mat<bool, 3, 3>;
+using bmat4 = mat<bool, 4, 4>;
 
 
 }
