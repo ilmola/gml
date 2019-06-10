@@ -288,9 +288,9 @@ int main() {
 		EQ(SC, angle(v1, v1), zero);
 		EQ(SC, project(ones, ones), ones);
 		EQ(SC, unpackUnorm<double>(gml::uvec3{}), zeros);
-		EQ(SC, unpackUnorm<double>(gml::ucvec3{}), zeros);
+		EQ(SC, unpackUnorm<double>(gml::u8vec3{}), zeros);
 		EQ(SC, unpackUnorm<double>(gml::uvec3{std::numeric_limits<unsigned>::max()}), ones);
-		EQ(SC, unpackUnorm<double>(gml::ucvec3{std::numeric_limits<unsigned char>::max()}), ones);
+		EQ(SC, unpackUnorm<double>(gml::u8vec3{std::numeric_limits<unsigned char>::max()}), ones);
 		EQ(SC, packUnorm<unsigned>(zeros), gml::uvec3{});
 		EQ(SC, packUnorm<unsigned>(ones), gml::uvec3{std::numeric_limits<unsigned>::max()});
 		EQ(SC, unpackUnorm<double>(packUnorm<unsigned>(normalize(v1))), gml::clamp(normalize(v1), zeros, ones));

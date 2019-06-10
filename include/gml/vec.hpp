@@ -6,15 +6,14 @@
 #ifndef UUID_98EC23264CC64D72B996E6FC39002D48
 #define UUID_98EC23264CC64D72B996E6FC39002D48
 
-
 #include <assert.h>
-#include <iostream>
 #include <cmath>
-#include <utility>
+#include <cstdint>
+#include <iostream>
 #include <limits>
 #include <sstream>
 #include <string>
-
+#include <utility>
 
 namespace gml {
 
@@ -757,7 +756,6 @@ vec<TI, N> packSnorm(const vec<TF, N>& v) {
 }
 
 
-
 using vec2 = vec<float, 2>;
 using vec3 = vec<float, 3>;
 using vec4 = vec<float, 4>;
@@ -786,13 +784,37 @@ using cvec2 = vec<char, 2>;
 using cvec3 = vec<char, 3>;
 using cvec4 = vec<char, 4>;
 
-using scvec2 = vec<signed char, 2>;
-using scvec3 = vec<signed char, 3>;
-using scvec4 = vec<signed char, 4>;
+using i8vec2 = vec<std::int8_t, 2>;
+using i8vec3 = vec<std::int8_t, 3>;
+using i8vec4 = vec<std::int8_t, 4>;
 
-using ucvec2 = vec<unsigned char, 2>;
-using ucvec3 = vec<unsigned char, 3>;
-using ucvec4 = vec<unsigned char, 4>;
+using u8vec2 = vec<std::uint8_t, 2>;
+using u8vec3 = vec<std::uint8_t, 3>;
+using u8vec4 = vec<std::uint8_t, 4>;
+
+using i16vec2 = vec<std::int16_t, 2>;
+using i16vec3 = vec<std::int16_t, 3>;
+using i16vec4 = vec<std::int16_t, 4>;
+
+using u16vec2 = vec<std::uint16_t, 2>;
+using u16vec3 = vec<std::uint16_t, 3>;
+using u16vec4 = vec<std::uint16_t, 4>;
+
+using i32vec2 = vec<std::int32_t, 2>;
+using i32vec3 = vec<std::int32_t, 3>;
+using i32vec4 = vec<std::int32_t, 4>;
+
+using u32vec2 = vec<std::uint32_t, 2>;
+using u32vec3 = vec<std::uint32_t, 3>;
+using u32vec4 = vec<std::uint32_t, 4>;
+
+using i64vec2 = vec<std::int64_t, 2>;
+using i64vec3 = vec<std::int64_t, 3>;
+using i64vec4 = vec<std::int64_t, 4>;
+
+using u64vec2 = vec<std::uint64_t, 2>;
+using u64vec3 = vec<std::uint64_t, 3>;
+using u64vec4 = vec<std::uint64_t, 4>;
 
 }
 

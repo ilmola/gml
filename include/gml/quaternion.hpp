@@ -7,8 +7,9 @@
 #define UUID_B15DF4F752A94088BD3A77BC2D628831
 
 #include <assert.h>
-#include <iostream>
 #include <cmath>
+#include <cstdint>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -363,6 +364,22 @@ using iquat = quaternion<int>;
 using uquat = quaternion<unsigned>;
 
 using bquat = quaternion<bool>;
+
+using i8quat = quaternion<std::int8_t>;
+
+using u8quat = quaternion<std::uint8_t>;
+
+using i16quat = quaternion<std::int16_t>;
+
+using u16quat = quaternion<std::uint16_t>;
+
+using i32quat = quaternion<std::int32_t>;
+
+using u32quat = quaternion<std::uint32_t>;
+
+using i64quat = quaternion<std::int64_t>;
+
+using u64quat = quaternion<std::uint64_t>;
 
 }
 

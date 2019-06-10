@@ -6,10 +6,10 @@
 #ifndef UUID_8B39B0365617488895EAC6FEC2A32C6E
 #define UUID_8B39B0365617488895EAC6FEC2A32C6E
 
-
 #include <assert.h>
-#include <iostream>
 #include <cmath>
+#include <cstdint>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -907,7 +907,6 @@ mat<T, 3, 3> normalMatrix(const mat<T, 4, 4>& m)
 }
 
 
-
 using mat2x2 = mat<float, 2, 2>;
 using mat2x3 = mat<float, 2, 3>;
 using mat2x4 = mat<float, 2, 4>;
@@ -978,6 +977,117 @@ using bmat2 = mat<bool, 2, 2>;
 using bmat3 = mat<bool, 3, 3>;
 using bmat4 = mat<bool, 4, 4>;
 
+using i8mat2x2 = mat<std::int8_t, 2, 2>;
+using i8mat2x3 = mat<std::int8_t, 2, 3>;
+using i8mat2x4 = mat<std::int8_t, 2, 4>;
+using i8mat3x2 = mat<std::int8_t, 3, 2>;
+using i8mat3x3 = mat<std::int8_t, 3, 3>;
+using i8mat3x4 = mat<std::int8_t, 3, 4>;
+using i8mat4x2 = mat<std::int8_t, 4, 2>;
+using i8mat4x3 = mat<std::int8_t, 4, 3>;
+using i8mat4x4 = mat<std::int8_t, 4, 4>;
+
+using i8mat2 = mat<std::int8_t, 2, 2>;
+using i8mat3 = mat<std::int8_t, 3, 3>;
+using i8mat4 = mat<std::int8_t, 4, 4>;
+
+using u8mat2x2 = mat<std::uint8_t, 2, 2>;
+using u8mat2x3 = mat<std::uint8_t, 2, 3>;
+using u8mat2x4 = mat<std::uint8_t, 2, 4>;
+using u8mat3x2 = mat<std::uint8_t, 3, 2>;
+using u8mat3x3 = mat<std::uint8_t, 3, 3>;
+using u8mat3x4 = mat<std::uint8_t, 3, 4>;
+using u8mat4x2 = mat<std::uint8_t, 4, 2>;
+using u8mat4x3 = mat<std::uint8_t, 4, 3>;
+using u8mat4x4 = mat<std::uint8_t, 4, 4>;
+
+using u8mat2 = mat<std::uint8_t, 2, 2>;
+using u8mat3 = mat<std::uint8_t, 3, 3>;
+using u8mat4 = mat<std::uint8_t, 4, 4>;
+
+using i16mat2x2 = mat<std::int16_t, 2, 2>;
+using i16mat2x3 = mat<std::int16_t, 2, 3>;
+using i16mat2x4 = mat<std::int16_t, 2, 4>;
+using i16mat3x2 = mat<std::int16_t, 3, 2>;
+using i16mat3x3 = mat<std::int16_t, 3, 3>;
+using i16mat3x4 = mat<std::int16_t, 3, 4>;
+using i16mat4x2 = mat<std::int16_t, 4, 2>;
+using i16mat4x3 = mat<std::int16_t, 4, 3>;
+using i16mat4x4 = mat<std::int16_t, 4, 4>;
+
+using i16mat2 = mat<std::int16_t, 2, 2>;
+using i16mat3 = mat<std::int16_t, 3, 3>;
+using i16mat4 = mat<std::int16_t, 4, 4>;
+
+using u16mat2x2 = mat<std::uint16_t, 2, 2>;
+using u16mat2x3 = mat<std::uint16_t, 2, 3>;
+using u16mat2x4 = mat<std::uint16_t, 2, 4>;
+using u16mat3x2 = mat<std::uint16_t, 3, 2>;
+using u16mat3x3 = mat<std::uint16_t, 3, 3>;
+using u16mat3x4 = mat<std::uint16_t, 3, 4>;
+using u16mat4x2 = mat<std::uint16_t, 4, 2>;
+using u16mat4x3 = mat<std::uint16_t, 4, 3>;
+using u16mat4x4 = mat<std::uint16_t, 4, 4>;
+
+using u16mat2 = mat<std::uint16_t, 2, 2>;
+using u16mat3 = mat<std::uint16_t, 3, 3>;
+using u16mat4 = mat<std::uint16_t, 4, 4>;
+
+using i32mat2x2 = mat<std::int32_t, 2, 2>;
+using i32mat2x3 = mat<std::int32_t, 2, 3>;
+using i32mat2x4 = mat<std::int32_t, 2, 4>;
+using i32mat3x2 = mat<std::int32_t, 3, 2>;
+using i32mat3x3 = mat<std::int32_t, 3, 3>;
+using i32mat3x4 = mat<std::int32_t, 3, 4>;
+using i32mat4x2 = mat<std::int32_t, 4, 2>;
+using i32mat4x3 = mat<std::int32_t, 4, 3>;
+using i32mat4x4 = mat<std::int32_t, 4, 4>;
+
+using i32mat2 = mat<std::int32_t, 2, 2>;
+using i32mat3 = mat<std::int32_t, 3, 3>;
+using i32mat4 = mat<std::int32_t, 4, 4>;
+
+using u32mat2x2 = mat<std::uint32_t, 2, 2>;
+using u32mat2x3 = mat<std::uint32_t, 2, 3>;
+using u32mat2x4 = mat<std::uint32_t, 2, 4>;
+using u32mat3x2 = mat<std::uint32_t, 3, 2>;
+using u32mat3x3 = mat<std::uint32_t, 3, 3>;
+using u32mat3x4 = mat<std::uint32_t, 3, 4>;
+using u32mat4x2 = mat<std::uint32_t, 4, 2>;
+using u32mat4x3 = mat<std::uint32_t, 4, 3>;
+using u32mat4x4 = mat<std::uint32_t, 4, 4>;
+
+using u32mat2 = mat<std::uint32_t, 2, 2>;
+using u32mat3 = mat<std::uint32_t, 3, 3>;
+using u32mat4 = mat<std::uint32_t, 4, 4>;
+
+using i64mat2x2 = mat<std::int64_t, 2, 2>;
+using i64mat2x3 = mat<std::int64_t, 2, 3>;
+using i64mat2x4 = mat<std::int64_t, 2, 4>;
+using i64mat3x2 = mat<std::int64_t, 3, 2>;
+using i64mat3x3 = mat<std::int64_t, 3, 3>;
+using i64mat3x4 = mat<std::int64_t, 3, 4>;
+using i64mat4x2 = mat<std::int64_t, 4, 2>;
+using i64mat4x3 = mat<std::int64_t, 4, 3>;
+using i64mat4x4 = mat<std::int64_t, 4, 4>;
+
+using i64mat2 = mat<std::int64_t, 2, 2>;
+using i64mat3 = mat<std::int64_t, 3, 3>;
+using i64mat4 = mat<std::int64_t, 4, 4>;
+
+using u64mat2x2 = mat<std::uint64_t, 2, 2>;
+using u64mat2x3 = mat<std::uint64_t, 2, 3>;
+using u64mat2x4 = mat<std::uint64_t, 2, 4>;
+using u64mat3x2 = mat<std::uint64_t, 3, 2>;
+using u64mat3x3 = mat<std::uint64_t, 3, 3>;
+using u64mat3x4 = mat<std::uint64_t, 3, 4>;
+using u64mat4x2 = mat<std::uint64_t, 4, 2>;
+using u64mat4x3 = mat<std::uint64_t, 4, 3>;
+using u64mat4x4 = mat<std::uint64_t, 4, 4>;
+
+using u64mat2 = mat<std::uint64_t, 2, 2>;
+using u64mat3 = mat<std::uint64_t, 3, 3>;
+using u64mat4 = mat<std::uint64_t, 4, 4>;
 
 }
 
