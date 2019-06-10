@@ -4,7 +4,7 @@ GML (recursive acronym for "GML math library") is a GLSL like minimalist vector,
 
 It's API is modeled closely after GLSL and is thus easy to use in OpenGL programs. It provides most of the GLSL functionality plus some extra.
 
-This library should not be confused with [glm](http://glm.g-truc.net) or with [Boost qvm](http://www.revergestudios.com/boost-qvm/).
+This library should not be confused with [glm](http://glm.g-truc.net) or with [Boost qvm](https://boostorg.github.io/qvm/).
 
 
 ## Setup ##
