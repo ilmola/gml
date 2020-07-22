@@ -299,7 +299,11 @@ int main() {
 		EQ(SC, unpackSnorm<double>(gml::ivec3{std::numeric_limits<int>::min()}), -ones);
 		EQ(SC, unpackSnorm<double>(packSnorm<int>(normalize(v1))), normalize(v1));
 		EQ(SC, packSnorm<int>(zeros), gml::ivec3{});
-
+		EQ(SC, packSrgb<unsigned>(zeros), gml::uvec3());
+		EQ(SC, packSrgb<unsigned>(ones), gml::uvec3(std::numeric_limits<unsigned>::max()));
+		EQ(SC, unpackSrgb<double>(gml::uvec3()), zeros);
+		EQ(SC, unpackSrgb<double>(gml::u8vec3(std::numeric_limits<std::uint8_t>::max())), ones);
+		EQ(SC, unpackSrgb<double>(packSrgb<unsigned>(abs(normalize(v1)))), abs(normalize(v1)));
 
 		//-Matrices-------------------------------------------------------------
 

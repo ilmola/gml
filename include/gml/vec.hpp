@@ -756,6 +756,67 @@ vec<TI, N> packSnorm(const vec<TF, N>& v) {
 }
 
 
+/// Pack a linear srgb color value to (non-linear) fixed-point.
+/// @tparam TI Must be an unsigned integral type.
+/// @tparam TF Must be a floating point type.
+template <typename TI, typename TF>
+vec<TI, 3> packSrgb(const vec<TF, 3>& v)
+{
+	const auto delinearize = [] (TF cl) -> TF
+	{
+		using std::pow;
+		if (cl <= static_cast<TF>(0)) return static_cast<TF>(0);
+		if (cl >= static_cast<TF>(1)) return static_cast<TF>(1);
+		if (cl < static_cast<TF>(0.0031308)) return static_cast<TF>(12.92) * cl;
+		return static_cast<TF>(1.055) * pow(cl, static_cast<TF>(0.41666)) - static_cast<TF>(0.055);
+	};
+	return packUnorm<TI, TF>(
+		vec<TF, 3>(delinearize(v[0]), delinearize(v[1]), delinearize(v[2]))
+	);
+}
+
+
+/// Pack a linear srgba color value to (non-linear) fixed-point.
+/// Alpha is unpacked as is and is not delinearized.
+/// @tparam TI Must be an unsigned integral type.
+/// @tparam TF Must be a floating point type.
+template <typename TI, typename TF>
+vec<TI, 4> packSrgba(const vec<TF, 4>& v)
+{
+	const vec<TI, 3> temp = packSrgb<TI, TF>(vec<TF, 3>(v[0], v[1], v[2]));
+	return vec<TI, 4>(temp[0], temp[1], temp[2], packUnorm<TI, TF>(v[3]));
+}
+
+
+/// Unpack a linear srgb color value from (non-linear) fixed-point.
+/// @tparam TF Must be a floating point type.
+/// @tparam TI Must be an unsigned integral type.
+template <typename TF, typename TI>
+vec<TF, 3> unpackSrgb(const vec<TI, 3>& v)
+{
+	const auto linearize = [] (TF cs) -> TF
+	{
+		using std::pow;
+		if (cs <= static_cast<TF>(0.04045)) return cs / static_cast<TF>(12.92);
+		return pow((cs + static_cast<TF>(0.055)) / static_cast<TF>(1.055), static_cast<TF>(2.4));
+	};
+	const vec<TF, 3> temp = unpackUnorm<TF, TI>(v);
+	return vec<TF, 3>(linearize(temp[0]), linearize(temp[1]), linearize(temp[2]));
+}
+
+
+/// Unpack a linear srgb color value from (non-linear) fixed-point.
+/// Alpha is unpacked as is and is not linearized.
+/// @tparam TF Must be a floating point type.
+/// @tparam TI Must be an unsigned integral type.
+template <typename TF, typename TI>
+vec<TF, 4> unpackSrgba(const vec<TI, 4>& v)
+{
+	const vec<TF, 3> temp = unpackSrgb<TF, TI>(vec<TI, 3>(v[0], v[1], v[2]));
+	return vec<TF, 4>(temp[0], temp[1], temp[2], unpackUnorm<TF, TI>(v[3]));
+}
+
+
 using vec2 = vec<float, 2>;
 using vec3 = vec<float, 3>;
 using vec4 = vec<float, 4>;
