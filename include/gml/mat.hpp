@@ -9,9 +9,11 @@
 #include <assert.h>
 #include <cmath>
 #include <cstdint>
+#ifndef GML_EMBEDDED
 #include <iostream>
 #include <sstream>
 #include <string>
+#endif
 #include <tuple>
 
 #include "vec.hpp"
@@ -265,6 +267,7 @@ mat<T, C, R> operator*(const T& a, const mat<T, C, R>& m) {
 	return temp;
 }
 
+#ifndef GML_EMBEDDED
 
 /// Prints the matrix to a stream inside brackets columns separated by a comma.
 template <typename T, int C, int R>
@@ -301,6 +304,7 @@ std::string to_string(const mat<T, C, R>& m) {
 	return ss.str();
 }
 
+#endif
 
 /// Returns the transpose of the matrix.
 template <typename T, int C, int R>

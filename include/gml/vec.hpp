@@ -9,10 +9,12 @@
 #include <assert.h>
 #include <cmath>
 #include <cstdint>
-#include <iostream>
 #include <limits>
+#ifndef GML_EMBEDDED
+#include <iostream>
 #include <sstream>
 #include <string>
+#endif
 #include <utility>
 
 namespace gml {
@@ -346,6 +348,8 @@ vec<T, N> operator/(const T& a, const vec<T, N>& v) {
 }
 
 
+#ifndef GML_EMBEDDED
+
 /// Prints the vector to a stream inside brackets components separated by a comma.
 template <typename T, int N>
 std::ostream& operator<<(std::ostream& os, const vec<T, N>& v) {
@@ -380,6 +384,8 @@ std::string to_string(const vec<T, N>& v) {
 	ss << v;
 	return ss.str();
 }
+
+#endif
 
 
 /// Dot products of vectors v1 and v2
