@@ -9,9 +9,11 @@
 #include <assert.h>
 #include <cmath>
 #include <cstdint>
+#ifndef GML_EMBEDDED
 #include <iostream>
 #include <sstream>
 #include <string>
+#endif
 #include <tuple>
 
 #include "vec.hpp"
@@ -208,6 +210,8 @@ quaternion<T> operator-(const vec<T, 3>& v, const quaternion<T>& q) {
 }
 
 
+#ifndef GML_EMBEDDED
+
 /// Write a quaternion to a stream inside brackets parts separated by a comma.
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const quaternion<T>& q) {
@@ -233,6 +237,8 @@ std::string to_string(const quaternion<T>& q) {
 	ss << q;
 	return ss.str();
 }
+
+#endif
 
 
 /// Returns the squared magnitude of the quaternion q
